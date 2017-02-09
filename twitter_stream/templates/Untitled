@@ -1,0 +1,24 @@
+<div class="col-md-3">
+
+
+<div class="well"> 
+                    <img src="{{tweet_profile|index:i}}" class="img-rounded"> </img>
+                    
+                    {# If twitterretweet is not empty then make the a tag #}
+                    
+                    {% if twitterretweet|index:i != "" %}
+                    
+                    <a href= "{{twitterretweet|index:i}}"> please click me </a>
+                    
+                    {% endif %}
+                    
+                    <br> {{tweet|index:i}}<br> 
+                    
+                    {# If twitter_image tweet is not empty then make the image tag #}
+                    
+                    {% if tweet_image|index:i != "" %}
+                    
+                    <img src="{{tweet_image|index:i}}" class="img-responsive"> </img> 
+                    
+                    {% endif %}
+                </div> 

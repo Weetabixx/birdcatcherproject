@@ -16,7 +16,7 @@ class tweet(models.Model):
     tweet_profile_picture = models.CharField(max_length=2084)
     
     tweet_expand_url = models.CharField(max_length=2084,blank=True)
-    
+    tweet_image = models.CharField(max_length=2084,blank=True)
     tweet_image = models.CharField(max_length=2084,blank=True)
     
     tweet_created = models.CharField(max_length=100, null=True, blank=True)
