@@ -4,16 +4,16 @@
         {# load bootstrap 3 stylesheets and index.css#}     
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href= "{% static 'css/index.css' %}"/>
+        <link rel="stylesheet" href= "{% static  'css/index.css' %}"/>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     </head>
     <body>
-        <div class="page-header" style = "background-color : #0084b4;">
+        <div class="page-header">
         <h1>Birdcatcher</h1>
         </div>
         
-        <div class="container-fluid" style = "background-color: #c0deed;">
+        <div class="container-fluid">
         
         {% load twitter_stream_extras %}
         {# loads custom filter to easily iterate over each element using list|index:n #}
