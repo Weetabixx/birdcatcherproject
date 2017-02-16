@@ -7,6 +7,8 @@ except ImportError:
 from .models import tweet
 from .models import account
 from twitter import Twitter, OAuth, TwitterHTTPError,TwitterStream
+import oembed
+
 
 
 # Variables that contains the user credentials to access Twitter API
@@ -18,25 +20,34 @@ CONSUMER_SECRET = 'IAsBqLL6lOQdcZ4VRu1ZIPvTOMIDw2Pa4bMbPtXbxP8Xwkjjd6'
 
 oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
 
-
-
 twitter = Twitter(auth=oauth)
+
+consumer = oembed.OEmbedConsumer()
+endpoint = oembed.OEmbedEndpoint('https://publish.twitter.com/oembed?', 'https://twitter.com/*' )
+consumer.addEndpoint(endpoint)
+
+def embed_tweet(tweet_id,tweet_handle):
+    response = consumer.embed("https://twitter.com/"+tweet_handle+"/status/" + str(tweet_id))
+    html_tweet = response["html"]
+    return html_tweet
 
 # Search queries to be parsed by Twitter API
 
 #get handle objects
-handlelist = ["one_item"]
-handlelist = account.objects.all()
 
 #get twitter results using handle objects
-
-result_list = []
-for handle in handlelist: # create a search for each handle
-    searchq = 'from:' + handle.account_handle
-    #temp_posts = twitter.search.tweets(q='from:@hm_morgan', result_type='recent', lang='en', count=4) # fix incase handlelist is empty
-    temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10)
-    result_list.append(temp_posts)
+try:
+    handlelist = ["one_item"]
+    handlelist = account.objects.all()
     
+    result_list = []
+    for handle in handlelist: # create a search for each handle
+        searchq = 'from:' + handle.account_handle
+        #temp_posts = twitter.search.tweets(q='from:@hm_morgan', result_type='recent', lang='en', count=4) # fix incase handlelist is empty
+        temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10)
+        result_list.append(temp_posts)
+except:
+    pass
 
 # Open or create text file
 
@@ -57,7 +68,7 @@ for query_result in result_list: # iterate over each search query
         new_entry.tweet_id = query_result['statuses'][n]['id']
         new_entry.tweet_handle = query_result['statuses'][n]['user']['screen_name']
         new_entry.tweet_text = query_result['statuses'][n]['text']
-        new_entry.tweet_profile_picture = query_result['statuses'][n]['user']['profile_image_url_https']
+        #new_entry.tweet_profile_picture = query_result['statuses'][n]['user']['profile_image_url_https']
         #twitterdate_string = str(query_result['statuses'][n]['created_at'])
         #print twitterdate_string
         #twitterdate = twitterdate_string.split()
@@ -66,13 +77,19 @@ for query_result in result_list: # iterate over each search query
         #new_entry.tweet_created = "2017-2-09 10:26:16"
         new_entry.tweet_created = query_result['statuses'][n]['created_at'] #<<<<<< Convert to date timel
         #'%Y-%m-%d %H:%M:%S',     # '2006-10-25 14:30:59' is the syntax of datetimefield, but twitter returns
-    #               "created_at":"Wed Aug 27 13:08:45 +0000 2008"
+        #               "created_at":"Wed Aug 27 13:08:45 +0000 2008"
         #new_entry.tweet_expand_url = query_result['statuses'][n]['entities']['media'][0]['url']
         
-        try:
-            new_entry.tweet_expand_url = query_result['statuses'][n]['entities']['media'][0]['expanded_url']
-            new_entry.tweet_image = query_result['statuses'][n]['entities']['media'][0]['media_url']
-        except:
-            new_entry.tweet_expand_url = ""
-            new_entry.tweet_image = ""
+        #call oembed to create a html of the tweet to store
+        new_entry.tweet_html = embed_tweet(new_entry.tweet_id, new_entry.tweet_handle)
+        #try:
+            #new_entry.tweet_expand_url = query_result['statuses'][n]['entities']['media'][0]['expanded_url']
+            #new_entry.tweet_image = query_result['statuses'][n]['entities']['media'][0]['media_url']
+        #except:
+            #new_entry.tweet_expand_url = ""
+            #new_entry.tweet_image = ""
         new_entry.save()
+        
+        
+        
+    # need to create repeating steam here
