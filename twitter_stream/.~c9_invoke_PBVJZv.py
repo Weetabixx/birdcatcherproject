@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from datetime import datetime
+
 
 # Create your models here.
 
@@ -14,12 +14,13 @@ class tweet(models.Model):
     tweet_text = models.CharField(max_length=145)
     
     #tweet_profile_picture = models.CharField(max_length=2084)
+    
     #tweet_expand_url = models.CharField(max_length=2084,blank=True)
+    
     #tweet_image = models.CharField(max_length=2084,blank=True)
     
-    #tweet_created = models.CharField(max_length=100, null=True, blank=True)
+    tweet_created = models.CharField(max_length=100, null=True, blank=True)
     #twitter returns "created_at":"Wed Aug 27 13:08:45 +0000 2008"
-    tweet_created = models.DateTimeField()
     
     tweet_html = models.CharField(max_length=5000)
     
@@ -52,7 +53,7 @@ class hashtag(models.Model):
     
     hashtag_hash = models.CharField(primary_key=True, max_length=100)
     
-    hashtag_group = models.CharField(max_length=100, null=True)
+    hashtag_group = models.CharField(primary_key=True, max)
     
     try:
         def __unicode__(self):
@@ -66,7 +67,7 @@ class group(models.Model):
     
     group_level = models.IntegerField() 
     
-    group_parent = models.CharField(max_length=100, null = True, blank = True)
+    group_parent = models.CharField(max_length=100)
     
     try:
         def __unicode__(self):

@@ -8,7 +8,7 @@ except ImportError:
         
 from .models import tweet
 from .models import account
-from twitter import Twitter, OAuth, TwitterHTTPError,TwitterStream
+from datetime import datetime
 import oembed
 from datetime import datetime
 import time
@@ -48,7 +48,7 @@ try:
     for handle in handlelist: # create a search for each handle
         searchq = 'from:' + handle.account_handle
         #temp_posts = twitter.search.tweets(q='from:@hm_morgan', result_type='recent', lang='en', count=4) # fix incase handlelist is empty
-        temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10)
+        temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10, -f)
         result_list.append(temp_posts)
     print "completed search"
 except:

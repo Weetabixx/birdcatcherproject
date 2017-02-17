@@ -48,7 +48,7 @@ try:
     for handle in handlelist: # create a search for each handle
         searchq = 'from:' + handle.account_handle
         #temp_posts = twitter.search.tweets(q='from:@hm_morgan', result_type='recent', lang='en', count=4) # fix incase handlelist is empty
-        temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10)
+        temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10, -f)
         result_list.append(temp_posts)
     print "completed search"
 except:
@@ -80,7 +80,7 @@ for query_result in result_list: # iterate over each search query
         #print twitterdate_string
         #print twitterdate_string
         #twitterdate = twitterdate_string.split()
-        #djangodate = '' + str(datetime.date.today().year) +'-'+ str(strptime(twitterdate[1],'%b').tm_mon) +'-'+ twitterdate[2] +' '+ twitterdate[3]
+        new_entry.tw
         #print djangodate
         #new_entry.tweet_created = "2017-02-09 10:26:16"
         #new_entry.tweet_created = query_result['statuses'][n]['created_at'] #<<<<<< Convert to date timel

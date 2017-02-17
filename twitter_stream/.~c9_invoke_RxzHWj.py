@@ -48,7 +48,7 @@ try:
     for handle in handlelist: # create a search for each handle
         searchq = 'from:' + handle.account_handle
         #temp_posts = twitter.search.tweets(q='from:@hm_morgan', result_type='recent', lang='en', count=4) # fix incase handlelist is empty
-        temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10)
+        temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10, -f)
         result_list.append(temp_posts)
     print "completed search"
 except:
@@ -71,7 +71,7 @@ for query_result in result_list: # iterate over each search query
     for n in range(len(query_result['statuses'])): # iterate over each status in query
         new_entry = tweet()
         new_entry.tweet_id = query_result['statuses'][n]['id']
-        new_entry.tweet_handle = '@' + str(query_result['statuses'][n]['user']['screen_name'])
+        print twi.strftime('%Y-%m-%d');
         new_entry.tweet_text = query_result['statuses'][n]['text']
         #new_entry.tweet_profile_picture = query_result['statuses'][n]['user']['profile_image_url_https']
         twitterdate_string = query_result['statuses'][n]['created_at']
