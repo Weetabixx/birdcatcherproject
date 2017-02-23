@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^(?P<group_name>\w{0,50})/', twitter_stream.views.index, name='index'),
     url(r'^$', twitter_stream.views.index, name='index'),
-    
+
 ]
 

@@ -18,9 +18,6 @@ from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 import os
-from threading import Thread
-import requests.packages.urllib3
-requests.packages.urllib3.disable_warnings()
 
 
 # Variables that contains the user credentials to access Twitter API
@@ -40,7 +37,7 @@ endpoint = oembed.OEmbedEndpoint('https://publish.twitter.com/oembed?', 'https:/
 consumer.addEndpoint(endpoint)
 
 #function to retrieve embedded tweet
-def embed_tweet(tweet_id,tweet_handle):
+#launch thread to g
     response = consumer.embed("https://twitter.com/"+tweet_handle+"/status/" + str(tweet_id))
     html_tweet = response["html"]
     return html_tweet
@@ -63,49 +60,35 @@ def store_tweet(status): # stores a status in the database and retrieves a embed
 
 # listener Class Override
 
-class listener(tweepy.StreamListener):
-    
+start_time = time.time() #grabs the system time
+
+class listener(StreamListener):
+        
     def on_data(self, data):    
-    # Twitter returns data in JSON format - we need to decode it first
+	# Twitter returns data in JSON format - we need to decode it first
         decoded = json.loads(data)
         store_tweet(decoded)
-        return True
-        
-    def on_error(self, status):
-        print status
-        if status == 420:
-            return False
-
+ 
+	def on_error(self, status):
+	    pass
+		#print statuses
+		
 l = listener()
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
-api = tweepy.API(auth)
 
 stream = Stream(auth, l)
-try:
-    handlelistx = []
-    handlelistx = account.objects.all()
-    track_handlelist = [str(x.account_handle) for x in handlelistx ]
-    print track_handlelist
-    print "tracking"
-    user = api.get_user(screen_name = 'WuWaikai')
-    print user.id
-    #stream.filter(track = str(track_handlelist))0
-    stream.filter(follow = [str(user.id)], async=True)
-    print "done setting up track"
-except:
-    print "well you fucked it"
 
+stream.filter(track=['programming'])
 
 
 #get handle objects
 
 
+
 try:
     handlelist = ["one_item"]
     handlelist = account.objects.all()
-    
-    #get twitter results using handle objects
     
     result_list = []
     for handle in handlelist: # create a search for each handle
@@ -122,8 +105,9 @@ except:
 for query_result in result_list: # iterate over each search query
     for n in range(len(query_result['statuses'])): # iterate over each status in query
         store_tweet(query_result['statuses'][n])
-print "site ready for access"
     
+    
+
         
         
         

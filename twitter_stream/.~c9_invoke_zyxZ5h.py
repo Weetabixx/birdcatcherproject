@@ -6,20 +6,13 @@ import datetime
 import twitter_stream
 import stream
 import json
-from dateutil import parser
-import tweepy
-from tweepy import Stream
-from tweepy import OAuthHandler
-from tweepy.streaming import StreamListener
-import os
-from threading import Thread
-import requests.packages.urllib3
-requests.packages.urllib3.disable_warnings()
+
 
 # Create your views here.
 
 # Display the received tweets
 
+print "reached def index"
 def index(request, group_name=''): #second param "group" 
 
     all_groups = group.objects.all()    #checks to find group
@@ -53,7 +46,7 @@ def index(request, group_name=''): #second param "group"
     print list_of_accounts
     for acc in list_of_accounts:
         list_of_handles.append(acc.account_handle)
-
+    
     
     #need to change all tweets to only tweets associated with the handles in the last step
    
@@ -78,3 +71,5 @@ def index(request, group_name=''): #second param "group"
 
     return HttpResponse(template.render(context))
     
+wh
+print "views.py finished"
