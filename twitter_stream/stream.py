@@ -19,7 +19,6 @@ from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 import os
 from threading import Thread
-from bulkops import insert_many
 import requests.packages.urllib3
 from django.db import transaction
 requests.packages.urllib3.disable_warnings()
@@ -46,22 +45,6 @@ def embed_tweet(tweet_id,tweet_handle):
     response = consumer.embed("https://twitter.com/"+tweet_handle+"/status/" + str(tweet_id))
     html_tweet = response["html"]
     return html_tweet
-    
-'''from bulkops import insert_many
-from our_models import Book
-
-objects = []
-for data in data_source:
-    # Assume data['foreign_key'] is a reference to another model
-    # Change that to its primary key
-    data['foreign_key'] = data['foreign_key'].pk
-    objects.add(Book(**data))
-    # Keep our batch size from getting too big
-    if len(objects) > 200:
-        insert_many(objects)
-        objects = []
-insert_many(objects)'''
-
 
 def store_tweet(status): # stores a status in the database and retrieves a embeded html coder
     new_entry = tweet()
