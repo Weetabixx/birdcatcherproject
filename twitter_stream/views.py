@@ -6,15 +6,6 @@ import datetime
 import twitter_stream
 import stream
 import json
-from dateutil import parser
-import tweepy
-from tweepy import Stream
-from tweepy import OAuthHandler
-from tweepy.streaming import StreamListener
-import os
-from threading import Thread
-import requests.packages.urllib3
-requests.packages.urllib3.disable_warnings()
 
 # Create your views here.
 
