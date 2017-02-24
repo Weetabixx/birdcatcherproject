@@ -130,6 +130,10 @@ def search_api():
         handlelist = []
         handlelist = account.objects.all()
     
+#bitbucket test
+        
+        
+    # need to create repeating steam here but not to keep steam.py running because it would hold up the server
         #get twitter results using handle objects
         
         result_list = []
