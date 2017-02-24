@@ -124,7 +124,7 @@ for query_result in result_list: # iterate over each search query
         store_tweet(query_result['statuses'][n])
 print "site ready for access"
     
-        
+#bitbucket test
         
         
     # need to create repeating steam here but not to keep steam.py running because it would hold up the server
