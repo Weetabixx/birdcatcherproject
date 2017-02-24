@@ -25,17 +25,12 @@ requests.packages.urllib3.disable_warnings()
 
 
 # Variables that contains the user credentials to access Twitter API
-
 ACCESS_TOKEN = '235228993-UMgntnuS8UKyGU7pitxvMNxQO4Eqte2tgAGk9ijK'
 ACCESS_SECRET = '9I8YOVtb6zIZaPpQEnAdVOZaq6vNBZJZVaRiU2OZir8os'
 CONSUMER_KEY = 'pPa5GLuxOLzK57woQ1pdYQIAf'
 CONSUMER_SECRET = 'IAsBqLL6lOQdcZ4VRu1ZIPvTOMIDw2Pa4bMbPtXbxP8Xwkjjd6'
 
-'''
-oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
-twitter = Twitter(auth=oauth)
-'''
-
+#Establish connection to twitter for embedded tweet
 consumer = oembed.OEmbedConsumer()
 endpoint = oembed.OEmbedEndpoint('https://publish.twitter.com/oembed?', 'https://twitter.com/*' )
 consumer.addEndpoint(endpoint)
@@ -46,24 +41,20 @@ def embed_tweet(tweet_id,tweet_handle):
     html_tweet = response["html"]
     return html_tweet
 
-def store_tweet(status): # stores a status in the database and retrieves a embeded html coder
+#stores a tweet in the database and retrieves an embedded html code
+def store_tweet(status):
     new_entry = tweet()
     new_entry.tweet_id = status['id']
     new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
     new_entry.tweet_text = status['text']
     twitterdate_string = status['created_at']
-    new_entry.tweet_created = parser.parse(twitterdate_string)#convert twittertime to djangotime
+    #convert twittertime to djangotime
+    new_entry.tweet_created = parser.parse(twitterdate_string)
     #call oembed to create a html of the tweet to store
     new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
-    
     new_entry.save()
 
-# Search queries to be parsed by Twitter API
-
-#launch thread to gather tweets continuously
-
 # listener Class Override
-
 class listener(tweepy.StreamListener):
     
     def on_data(self, data):    
@@ -86,7 +77,7 @@ def stream_api():
     api = tweepy.API(auth)
     
     stream = Stream(auth, l)
-    
+    #only 1 stream per authentication, else 420 error
     try:
     
         handlelistx = []
@@ -105,40 +96,31 @@ def stream_api():
 #get handle objects
 
 def search_api():
-    
+    #establishing connection to twitter REST API
     oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
     twitter = Twitter(auth=oauth)
-    
+    #try except, because if account table is empty, we don't search
     try:
         handlelist = []
         handlelist = account.objects.all()
-    
-#bitbucket test
         
-        
-    # need to create repeating steam here but not to keep steam.py running because it would hold up the server
         #get twitter results using handle objects
-        
+        # Search queries to be parsed by Twitter API
         result_list = []
         for handle in handlelist: # create a search for each handle
             searchq = 'from:' + handle.account_handle
             #temp_posts = twitter.search.tweets(q='from:@hm_morgan', result_type='recent', lang='en', count=4) # fix incase handlelist is empty
             temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10)
             result_list.append(temp_posts)
-        print "completed search"
     except:
         pass
     
-    
-    # Place tweets in Database
-    for query_result in result_list: # iterate over each search query
-        for n in range(len(query_result['statuses'])): # iterate over each status in query
+    for query_result in result_list: #iterate over each search query
+        for n in range(len(query_result['statuses'])): #iterate over each status(tweet) in query and apply store function
             store_tweet(query_result['statuses'][n])
-    
+
+#launch separate threads fro search and stream
 search_thread = Thread(target=search_api)
 stream_thread = Thread(target=stream_api)
 search_thread.start()
 #stream_thread.start()
-
-
-# need to create repeating steam here but not to keep steam.py running because it would hold up the server
