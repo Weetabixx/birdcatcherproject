@@ -43,6 +43,11 @@ def embed_tweet(tweet_id,tweet_handle):
 
 #stores a tweet in the database and retrieves an embedded html code
 def store_tweet(status):
+    '''
+    add the hashtags here, crosscheck received tweets with the hashtags stored in the database
+    hashtag table should contain the hashtag itself and the group it is linked to,
+    that way it's easier to check since user and hashtag must have the same group
+    '''
     new_entry = tweet()
     new_entry.tweet_id = status['id']
     new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
