@@ -60,36 +60,40 @@ class listener(tweepy.StreamListener):
     def on_data(self, data):    
     # Twitter returns data in JSON format - we need to decode it first
         decoded = json.loads(data)
-        print decoded
+        #print decoded
         store_tweet(decoded)
         return True
         
     def on_error(self, status):
-        print status
+        #print status
         if status == 420:
             return False
 
 def stream_api():
     
-    l = listener()
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
     api = tweepy.API(auth)
     
-    stream = Stream(auth, l)
+    l = listener()
+    stream = tweepy.Stream(auth = api.auth, listener=l)
     #only 1 stream per authentication, else 420 error
     try:
     
         handlelistx = []
         handlelistx = account.objects.all()
-        track_handlelist = [str(x.account_handle) for x in handlelistx ]
-        print track_handlelist
-        print "tracking"
-        user = api.get_user(screen_name = 'WuWaikai')
-        print user.id
+        #track_handlelist = [str(x.account_handle) for x in handlelistx ]
+        follow_handlelist = [str(api.get_user(screen_name = str(x.account_handle)[1:]).id) for x in handlelistx ]
+        print follow_handlelist
+        #print "tracking"
+        #user = api.get_user(screen_name = 'WuWaikai')
+        #user2 = api.get_user(screen_name = 'Every3Minutes')
+        #user3 = api.get_user(screen_name = 'notiven')
+        #print user.id
         #stream.filter(track = str(track_handlelist))0
-        stream.filter(follow = [str(user.id)], async=True)
-        print "done setting up track"
+        stream.filter(follow = follow_handlelist)
+        #stream.filter(follow = [str(user.id), str(user2.id), str(user3.id)], async=True)
+        #print "done setting up track"
     except:
         print "well you fucked it"
 
@@ -122,5 +126,5 @@ def search_api():
 #launch separate threads fro search and stream
 search_thread = Thread(target=search_api)
 stream_thread = Thread(target=stream_api)
-search_thread.start()
-#stream_thread.start()
+#search_thread.start()
+stream_thread.start()
