@@ -13,20 +13,13 @@ class tweet(models.Model):
     
     tweet_text = models.CharField(max_length=145)
     
-    #tweet_profile_picture = models.CharField(max_length=2084)
-    #tweet_expand_url = models.CharField(max_length=2084,blank=True)
-    #tweet_image = models.CharField(max_length=2084,blank=True)
-    
-    #tweet_created = models.CharField(max_length=100, null=True, blank=True)
     #twitter returns "created_at":"Wed Aug 27 13:08:45 +0000 2008"
     tweet_created = models.DateTimeField()
     
     tweet_html = models.CharField(max_length=5000)
     
     try:
-        
         def __unicode__(self):
-            
             return self.tweet_text
     except ValueError:
         pass
@@ -37,7 +30,7 @@ class account(models.Model):
     
     account_Name = models.CharField(max_length=100)
     
-    account_handle = models.CharField(max_length=100)
+    account_handle = models.CharField(max_length=100) #this assignment needs to trigger stream thread to restart
     
     account_group = models.CharField(max_length=100, null=True,  blank = True)
     #to be implemented later
