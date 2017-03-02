@@ -5,7 +5,6 @@ try:
 except ImportError:
         import simplejson as json
 
-        
 from .models import tweet
 from .models import account
 from .models import hashtag
