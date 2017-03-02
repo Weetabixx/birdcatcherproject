@@ -34,7 +34,7 @@ class account(models.Model):
     
     account_group = models.CharField(max_length=100, null=True,  blank = True)
     
-    account_filter = models.BooleanField(blank=False, null=False, default=True)
+    filter_by_hashtags = models.BooleanField(blank=False, null=False, default=True)
     #to be implemented later
     
     try:

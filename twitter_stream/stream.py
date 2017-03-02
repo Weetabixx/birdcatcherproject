@@ -43,6 +43,18 @@ def embed_tweet(tweet_id,tweet_handle):
     return html_tweet
 
 #stores a tweet in the database and retrieves an embedded html code
+def save_status(status):
+    new_entry = tweet()
+    new_entry.tweet_id = status['id']
+    new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
+    new_entry.tweet_text = status['text']
+    twitterdate_string = status['created_at']
+    #convert twittertime to djangotime
+    new_entry.tweet_created = parser.parse(twitterdate_string)
+    #call oembed to create a html of the tweet to store
+    new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
+    new_entry.save()
+
 def store_tweet(status):
     '''
     add the hashtags here, crosscheck received tweets with the hashtags stored in the database
@@ -63,6 +75,9 @@ def store_tweet(status):
     accounts = account.objects.filter(account_handle=handle)# just fetch the handle, can add a filter instead of for loop
     groups = []
     for acc in accounts:
+        if acc.filter_by_hashtags == False:
+            save_status(status)
+            return
         if acc.account_handle == handle: # selection of handles done in filter
             groups.append(acc.account_group)
     
@@ -76,18 +91,8 @@ def store_tweet(status):
                 #missing part, check if hashtag is in tweet...
                 if str(hasht) in str(status['text']):
                     print 'new post'
-#                
-# #               
-                    new_entry = tweet()
-                    new_entry.tweet_id = status['id']
-                    new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
-                    new_entry.tweet_text = status['text']
-                    twitterdate_string = status['created_at']
-                    #convert twittertime to djangotime
-                    new_entry.tweet_created = parser.parse(twitterdate_string)
-                    #call oembed to create a html of the tweet to store
-                    new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
-                    new_entry.save()
+                    save_status(status)
+
     
 #    new_entry = tweet()
 #    new_entry.tweet_id = status['id']
