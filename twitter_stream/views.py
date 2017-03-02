@@ -22,10 +22,12 @@ def index(request, group_name=''): #second param "group"
             group_found = True  #found group
             target_group = g_name
     if group_found == False:
-        template = loader.get_template('noGroupFound.html') #response if there was no such group
+        template = loader.get_template('noGroupFound.html')
+        #response if there was no such group
         context = Context({"available_groups": all_group_names})
         return HttpResponse(template.render(context))
     
+
     #find all subgroups of given group
     num_of_groups = 0
     list_of_groups = []
@@ -68,4 +70,8 @@ def index(request, group_name=''): #second param "group"
 
 
     return HttpResponse(template.render(context))
+    
+def home(request):
+    template = loader.get_template('home.html')
+    return HttpResponse(template.render())
     
