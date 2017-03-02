@@ -5,9 +5,9 @@ try:
 except ImportError:
         import simplejson as json
 
+        
 from .models import tweet
 from .models import account
-from .models import hashtag
 from twitter import Twitter, OAuth, TwitterHTTPError,TwitterStream
 import oembed
 from datetime import datetime
@@ -53,52 +53,16 @@ def store_tweet(status):
     is the same as account group and only then store it?
     yeah, that's what I thought
     '''
-    
-    
-    #retrieve handle of tweet
-    handle = '@' + str(status['user']['screen_name'])
-    
-    #retrieve its group(s can have multiple)
-    accounts = []
-    accounts = account.objects.filter(account_handle=handle)# just fetch the handle, can add a filter instead of for loop
-    groups = []
-    for acc in accounts:
-        if acc.account_handle == handle: # selection of handles done in filter
-            groups.append(acc.account_group)
-    
-    #retrieve hashtags associated with group
-    hashtaglist = []
-    hashtaglist = hashtag.objects.filter(hashtag_group__in = groups) # again can just use filter(hashtag_group__in =)
-    for hasht in hashtaglist:
-        for group in groups:
-            if hasht.hashtag_group == group:
-                
-                #missing part, check if hashtag is in tweet...
-                if str(hasht) in str(status['text']):
-                    print 'new post'
-#                
-# #               
-                    new_entry = tweet()
-                    new_entry.tweet_id = status['id']
-                    new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
-                    new_entry.tweet_text = status['text']
-                    twitterdate_string = status['created_at']
-                    #convert twittertime to djangotime
-                    new_entry.tweet_created = parser.parse(twitterdate_string)
-                    #call oembed to create a html of the tweet to store
-                    new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
-                    new_entry.save()
-    
-#    new_entry = tweet()
-#    new_entry.tweet_id = status['id']
-#    new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
-#    new_entry.tweet_text = status['text']
-#    twitterdate_string = status['created_at']
-#    #convert twittertime to djangotime
-#    new_entry.tweet_created = parser.parse(twitterdate_string)
-#    #call oembed to create a html of the tweet to store
-#    new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
-#    new_entry.save()
+    new_entry = tweet()
+    new_entry.tweet_id = status['id']
+    new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
+    new_entry.tweet_text = status['text']
+    twitterdate_string = status['created_at']
+    #convert twittertime to djangotime
+    new_entry.tweet_created = parser.parse(twitterdate_string)
+    #call oembed to create a html of the tweet to store
+    new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
+    new_entry.save()
 
 # listener Class Override
 class listener(tweepy.StreamListener):
@@ -111,7 +75,7 @@ class listener(tweepy.StreamListener):
         return True
         
     def on_error(self, status):
-        print status
+        #print status
         if status == 420:
             return False
 
@@ -179,7 +143,7 @@ also need manual restart button in case you want the new account's tweets
 
 maybe add while statement which periodically checks if previous list used to start stream
 is the same as the current list, if not then restart thread
-----
+why not do it so that in models if something is sav
 must keep in mind the api limitations, so cant be restarting the stream every 10 seconds, more like 10 minutes,
 but then also keep in mind if someone just changes the handle of someone rather than add/remove a handle, cant simply keep count
 
@@ -197,10 +161,10 @@ search_thread.start()
 '''
 initial_count = changes whenever the stream starts?
 updated_count = checks periodically and if this is diff then restart thread?
-
+'''
 initial_count = account.objects.all().count()
 
-def changed():
+'''def changed():
     global initial_count
     updated_count = account.objects.all().count()
     print initial_count
