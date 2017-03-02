@@ -61,15 +61,15 @@ def store_tweet(status):
     
     #retrieve its group(s can have multiple)
     accounts = []
-    accounts = account.objects.all()
+    accounts = account.objects.filter(account_handle=handle)# just fetch the handle, can add a filter instead of for loop
     groups = []
     for acc in accounts:
-        if acc.account_handle == handle:
-            groups.append(acc.account_group)
+        #if acc.account_handle == handle: # selection of handles done in filter
+        groups.append(acc.account_group)
     
     #retrieve hashtags associated with group
     hashtaglist = []
-    hashtaglist = hashtag.objects.all()
+    hashtaglist = hashtag.objects.all() # again can just use filter(hashtag_group__in =)
     for hasht in hashtaglist:
         for group in groups:
             if hasht.hashtag_group == group:

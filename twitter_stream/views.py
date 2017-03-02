@@ -24,9 +24,6 @@ def index(request, group_name=''): #second param "group"
     if group_found == False:
         template = loader.get_template('noGroupFound.html')
         #response if there was no such group
-        if group_name =='home':
-            template = loader.get_template('home.html')
-            
         context = Context({"available_groups": all_group_names})
         return HttpResponse(template.render(context))
     
@@ -73,4 +70,8 @@ def index(request, group_name=''): #second param "group"
 
 
     return HttpResponse(template.render(context))
+    
+def home(request):
+    template = loader.get_template('home.html')
+    return HttpResponse(template.render())
     
