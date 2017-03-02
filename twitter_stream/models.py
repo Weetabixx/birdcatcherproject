@@ -33,6 +33,8 @@ class account(models.Model):
     account_handle = models.CharField(max_length=100) #this assignment needs to trigger stream thread to restart
     
     account_group = models.CharField(max_length=100, null=True,  blank = True)
+    
+    account_filter = models.BooleanField(blank=False, null=False, default=True)
     #to be implemented later
     
     try:
