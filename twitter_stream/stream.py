@@ -22,7 +22,6 @@ from threading import Thread
 import threading
 import requests.packages.urllib3
 from django.db import transaction
-requests.packages.urllib3.disable_warnings()
 
 
 # Variables that contains the user credentials to access Twitter API
