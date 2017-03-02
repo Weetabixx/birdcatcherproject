@@ -27,6 +27,7 @@ pytz==2012c
 requests==2.2.1
 simplejson==3.3.1
 twitter==1.12.1
+tweepy==3.5.0
 urllib3==1.7.1
 virtualenv==1.11.4
 virtualenv-clone==0.2.4
