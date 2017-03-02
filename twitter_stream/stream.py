@@ -64,8 +64,8 @@ def store_tweet(status):
     accounts = account.objects.filter(account_handle=handle)# just fetch the handle, can add a filter instead of for loop
     groups = []
     for acc in accounts:
-        #if acc.account_handle == handle: # selection of handles done in filter
-        groups.append(acc.account_group)
+        if acc.account_handle == handle: # selection of handles done in filter
+            groups.append(acc.account_group)
     
     #retrieve hashtags associated with group
     hashtaglist = []
@@ -77,8 +77,8 @@ def store_tweet(status):
                 #missing part, check if hashtag is in tweet...
                 if str(hasht) in str(status['text']):
                     print 'new post'
-                
-                
+#                
+# #               
                     new_entry = tweet()
                     new_entry.tweet_id = status['id']
                     new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
@@ -89,6 +89,17 @@ def store_tweet(status):
                     #call oembed to create a html of the tweet to store
                     new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
                     new_entry.save()
+    
+#    new_entry = tweet()
+#    new_entry.tweet_id = status['id']
+#    new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
+#    new_entry.tweet_text = status['text']
+#    twitterdate_string = status['created_at']
+#    #convert twittertime to djangotime
+#    new_entry.tweet_created = parser.parse(twitterdate_string)
+#    #call oembed to create a html of the tweet to store
+#    new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
+#    new_entry.save()
 
 # listener Class Override
 class listener(tweepy.StreamListener):
@@ -101,7 +112,7 @@ class listener(tweepy.StreamListener):
         return True
         
     def on_error(self, status):
-        #print status
+        print status
         if status == 420:
             return False
 

@@ -43,7 +43,7 @@ class account(models.Model):
     
 class hashtag(models.Model):
     
-    hashtag_hash = models.CharField(primary_key=True, max_length=100)
+    hashtag_hash = models.CharField(primary_key=True, max_length=100, null=False)
     
     hashtag_group = models.CharField(max_length=100, null=True)
     
