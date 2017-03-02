@@ -5,7 +5,6 @@ try:
 except ImportError:
         import simplejson as json
 
-        
 from .models import tweet
 from .models import account
 from .models import hashtag
@@ -69,7 +68,7 @@ def store_tweet(status):
     
     #retrieve hashtags associated with group
     hashtaglist = []
-    hashtaglist = hashtag.objects.all() # again can just use filter(hashtag_group__in =)
+    hashtaglist = hashtag.objects.filter(hashtag_group__in = groups) # again can just use filter(hashtag_group__in =)
     for hasht in hashtaglist:
         for group in groups:
             if hasht.hashtag_group == group:
