@@ -87,8 +87,8 @@ def store_tweet(status):
         for group in groups:
             if hasht.hashtag_group == group:
                 
-                #missing part, check if hashtag is in tweet...
-                if str(hasht) in str(status['text']):
+                #missing part, check if hashtag is in tweet... changed str(hasht) to str(hasht.hashtag_hash)
+                if hasht.hashtag_hash in str(status['text']):
                     print 'new post'
                     save_status(status)
 

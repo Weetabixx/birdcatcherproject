@@ -18,12 +18,14 @@ from django.conf.urls import include, url
 from django.contrib import admin
 import twitter_stream.views
 
+
 urlpatterns = [
     url(r'^admin', admin.site.urls),
     url(r'^admin/', admin.site.urls),
     url(r'^(?P<group_name>\w{1,50})', twitter_stream.views.index, name='index'),
     url(r'^(?P<group_name>\w{1,50})/', twitter_stream.views.index, name='index'),
     url(r'', twitter_stream.views.home, name='home'),
+   # url(r'^(?P<q>[\w-]+/?)', twitter_stream.views.home, name='home'),
     #url(r'^$', twitter_stream.views.index, name='index'),
 ]
 

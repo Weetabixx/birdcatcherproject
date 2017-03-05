@@ -23,7 +23,21 @@ class tweet(models.Model):
             return self.tweet_text
     except ValueError:
         pass
-
+    
+class group(models.Model):
+    
+    group_name = models.CharField(primary_key=True, max_length=100)
+    
+    group_level = models.IntegerField() 
+    
+    group_parent = models.CharField(max_length=100, null = True, blank = True) 
+    
+    try:
+        def __unicode__(self):
+            return self.group_name
+    except ValueError:
+        pass
+    
 class account(models.Model):
     
     account_id = models.IntegerField(primary_key=True)
@@ -32,40 +46,25 @@ class account(models.Model):
     
     account_handle = models.CharField(max_length=100) #this assignment needs to trigger stream thread to restart
     
-    account_group = models.CharField(max_length=100, null=True,  blank = True)
+    account_group = models.CharField(max_length=100, null=True,  blank = True, choices=[(x.group_name,x.group_name) for x in group.objects.all()])
     
     filter_by_hashtags = models.BooleanField(blank=False, null=False, default=True)
     #to be implemented later
-    
     try:
         def __unicode__(self):
             return self.account_Name
     except ValueError:
         pass
-    
+
 class hashtag(models.Model):
     
     hashtag_hash = models.CharField(primary_key=True, max_length=100, null=False)
     
-    hashtag_group = models.CharField(max_length=100, null=True)
+    hashtag_group = models.CharField(max_length=100, null=True, choices=[(x.group_name,x.group_name) for x in group.objects.all()])
     
     try:
         def __unicode__(self):
             return self.hashtag_hash
-    except ValueError:
-        pass
-    
-class group(models.Model):
-    
-    group_name = models.CharField(primary_key=True, max_length=100)
-    
-    group_level = models.IntegerField() 
-    
-    group_parent = models.CharField(max_length=100, null = True, blank = True)
-    
-    try:
-        def __unicode__(self):
-            return self.group_name
     except ValueError:
         pass
     

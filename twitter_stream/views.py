@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.template import Context, loader
 from .models import tweet, group, account
 import datetime
@@ -12,7 +13,7 @@ import json
 # Display the received tweets
 
 def index(request, group_name=''): #second param "group" 
-
+    
     all_groups = group.objects.all()    #checks to find group
     all_group_names = []
     group_found = False
@@ -65,13 +66,22 @@ def index(request, group_name=''): #second param "group"
     template = loader.get_template('index.html')
 
 # range in context is used for iterating over each tweet
-
+   
     context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": group_name})
 
-
+       
     return HttpResponse(template.render(context))
     
 def home(request):
-    template = loader.get_template('home.html')
-    return HttpResponse(template.render())
+    searchvalue = ''
+   
+    q = request.GET.get('q')
+    context = Context({"q":q})
+    
+    if q == None: 
+        template = loader.get_template('home.html')
+    else: 
+        return HttpResponseRedirect(q) 
+        
+    return HttpResponse(template.render(context))
     
