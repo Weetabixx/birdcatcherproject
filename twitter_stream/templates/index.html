@@ -1,6 +1,7 @@
 {% load staticfiles %}
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         {# load bootstrap 3 stylesheets and index.css#}     
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -11,12 +12,13 @@
         <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/images/favicon.ico"/>
     </head>
     <body>
-
-        <div class="page-header" style="margin-bottom: 0px">
+<div class="page-header"  style="  height:70px; ">
         <h1>Birdcatcher</h1>
      
         </div>
-     <nav class="navbar navbar-default">
+       
+    <nav class="navbar navbar-default " style =" top:0px; width:100%; z-index:999; "data-spy="affix" data-offset-top="57">
+         
   <div class="container-fluid">
     <div class="navbar-header">
       <p class="navbar-text" style="color: #000" >{{groups}}</p>
@@ -38,6 +40,22 @@
       </li>
      
     </ul>
+     <ul class="nav navbar-nav" >
+      <li class="dropdown">
+        <a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">All groups 
+        <span class="caret"> </span></a>
+        <ul class="dropdown-menu">
+      {% for x in available_groups %} 
+            
+        
+          <li><a href="/{{ x }}">{{ x }}</a></li>
+        
+  
+             {% endfor %}
+          </ul>    
+      </li>
+      
+ </ul> 
     <form class="navbar-form navbar-right">
       <div class="input-group">
         <input type="text" class="form-control" style=" height: 28px" placeholder="Search for tweets">
@@ -55,15 +73,15 @@
     </ul>
 </nav>
         
-        <div class="container-fluid">
+         <div class="container-fluid" style="z-index:1;"  > <!-- this contains all of the tweets-->
         
         {% load twitter_stream_extras %}
         {# loads custom filter to easily iterate over each element using list|index:n #}
         {% for n in four %}
-            <div class="col-md-3">
+            <div class="col-md-3"> <!-- this contains one collumn of tweets-->
             {% for i in range %}
                 {% if i|remain:4 == n %}
-                <div>
+                <div class= z-depth-5><!-- this contains one tweet-->
                     {% autoescape off %}
                     {{embedhtml|index:i}}
                     {% endautoescape %}

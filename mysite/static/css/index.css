@@ -1,5 +1,5 @@
 .page-header{
-    background-color: #B7E7F6;
+    background-color: #2FC2EF;
      margin-top: 0px;
      margin-bottom: 0px;
     color: #000;
@@ -8,7 +8,14 @@
 h1{
     margin: 0px;
 }
+.affix {
+      top: 0;
+      width: 100%;
+  }
 
+  .affix + .container-fluid {
+      padding-top: 70px;
+  }
 .col-md-3{
     font-size: large;
     color: #FFF;

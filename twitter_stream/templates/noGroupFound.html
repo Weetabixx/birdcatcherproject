@@ -4,6 +4,8 @@
         {# load bootstrap 3 stylesheets and index.css#}     
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href= "{% static  'css/index.css' %}"/>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -19,16 +21,36 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <p class="navbar-text" style="color: #000" > Homepage</p>
-    </div>
-   </nav>
+    </div> 
+    <p class="navbar-text" style="color: #000"> No Group Found with that name exists sorry. Here are the available groups</p>  
+     <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">All groups 
+        <span class="caret"> </span></a>
+        <ul class="dropdown-menu">
+      {% for x in available_groups %} 
+            
+        
+          <li><a href="/{{ x }}">{{ x }}</a></li>
+        
+  
+             {% endfor %}
+          </ul>    
+      </li>
+      
+ </ul> 
+
+   <input class='btn  navbar-btn' action="action" type="button" value="Back" style ='color:black' onclick="history.go(-1);" /> 
+  
+
+  </nav>
         
     <div>
         <p>
-            No Group Found with the name {{current_path}} sorry.
-            Here are some sugestions
-            {{available_groups}}
+           
+         
         </p>
     
     </div>
-  <input action="action" type="button" value="Back" style ='color:black' onclick="history.go(-1);" />
+ 
     </body>

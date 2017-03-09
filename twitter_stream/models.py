@@ -18,6 +18,8 @@ class tweet(models.Model):
     
     tweet_html = models.CharField(max_length=5000)
     
+    tweet_pin = models.BooleanField(blank=False, null=False, default=False)
+    
     try:
         def __unicode__(self):
             return self.tweet_text

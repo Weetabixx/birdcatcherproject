@@ -13,7 +13,6 @@ import json
 # Display the received tweets
 
 def index(request, group_name=''): #second param "group" 
-    
     all_groups = group.objects.all()    #checks to find group
     all_group_names = []
     group_found = False
@@ -59,7 +58,7 @@ def index(request, group_name=''): #second param "group"
     
     # Iterate through the tweets
     
-    for n in range(len(tweets)):
+    for n in range(min(len(tweets),200)): # displaying more than 200 tweets does not display properly
         tweet_html.append(tweets[n].tweet_html)
         tweet_text.append(tweets[n].tweet_text)
         
@@ -67,21 +66,17 @@ def index(request, group_name=''): #second param "group"
 
 # range in context is used for iterating over each tweet
    
-    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": group_name})
+    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": group_name, "available_groups": all_group_names})
 
        
     return HttpResponse(template.render(context))
     
 def home(request):
-    searchvalue = ''
+    all_groups = group.objects.all()
+    context = Context({"available_groups": all_groups})   
    
-    q = request.GET.get('q')
-    context = Context({"q":q})
-    
-    if q == None: 
-        template = loader.get_template('home.html')
-    else: 
-        return HttpResponseRedirect(q) 
+    template = loader.get_template('home.html')  # if nothing in q then just load home 
+ 
         
     return HttpResponse(template.render(context))
     

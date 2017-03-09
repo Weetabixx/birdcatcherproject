@@ -22,7 +22,14 @@ h1{
     float:left;
 }
 
+.affix {
+      top: 0;
+      width: 100%;
+  }
 
+  .affix + .container-fluid {
+      padding-top: 70px;
+  }
 
 .img-rounded {
     margin-top: 3%;
