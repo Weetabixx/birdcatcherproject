@@ -52,21 +52,36 @@ def index(request, group_name=''): #second param "group"
    
     tweets = tweet.objects.filter(tweet_handle__in=list_of_handles)# need to order tweets by datetime
     tweets = tweets.order_by('-tweet_created')
+    # put pinned tweets to front and make tweet dark themed
+    pinned_tweets = []
+    norm_tweets = []
+    for t in tweets:
+        if t.tweet_pin == group_name:
+            pinned_tweets.append(t)
+        else:
+            norm_tweets.append(t)
+            
+    tot_tweets = []
+    for t in pinned_tweets: # brings all tweets together again, but with pinned ones at the start
+        tot_tweets.append(t)
+    for t in norm_tweets:
+        tot_tweets.append(t)
+        
     # Define arrays
     tweet_text = []
     tweet_html = []
     
     # Iterate through the tweets
     
-    for n in range(min(len(tweets),200)): # displaying more than 200 tweets does not display properly
-        tweet_html.append(tweets[n].tweet_html)
-        tweet_text.append(tweets[n].tweet_text)
+    for n in range(min(len(tot_tweets),200)): # displaying more than 200 tweets does not display properly
+        tweet_html.append(tot_tweets[n].tweet_html)
+        tweet_text.append(tot_tweets[n].tweet_text)
         
     template = loader.get_template('index.html')
-
+    groupnamewithoutunderscore = group_name.replace("_", " ")
 # range in context is used for iterating over each tweet
    
-    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": group_name, "available_groups": all_group_names})
+    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "available_groups": all_group_names, "pin_count": len(pinned_tweets)})
 
        
     return HttpResponse(template.render(context))
@@ -80,3 +95,7 @@ def home(request):
         
     return HttpResponse(template.render(context))
     
+    
+def search(request,search_query):
+    pass
+

@@ -2,9 +2,25 @@ from __future__ import unicode_literals
 
 from django.db import models
 from datetime import datetime
+#from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
+    
+class group(models.Model):
+    
+    group_name = models.CharField(primary_key=True, max_length=100)
+    
+    group_level = models.IntegerField() 
+    
+    group_parent = models.CharField(max_length=100, null = True, blank = True) 
+    
+    try:
+        def __unicode__(self):
+            return self.group_name
+    except ValueError:
+        pass
+    
 class tweet(models.Model):
     
     tweet_id = models.IntegerField(primary_key=True)
@@ -18,25 +34,11 @@ class tweet(models.Model):
     
     tweet_html = models.CharField(max_length=5000)
     
-    tweet_pin = models.BooleanField(blank=False, null=False, default=False)
+    tweet_pin = models.CharField(max_length=100, null=True,  blank = True, choices=[(x.group_name,x.group_name) for x in group.objects.all()])
     
     try:
         def __unicode__(self):
             return self.tweet_text
-    except ValueError:
-        pass
-    
-class group(models.Model):
-    
-    group_name = models.CharField(primary_key=True, max_length=100)
-    
-    group_level = models.IntegerField() 
-    
-    group_parent = models.CharField(max_length=100, null = True, blank = True) 
-    
-    try:
-        def __unicode__(self):
-            return self.group_name
     except ValueError:
         pass
     
@@ -69,4 +71,3 @@ class hashtag(models.Model):
             return self.hashtag_hash
     except ValueError:
         pass
-    

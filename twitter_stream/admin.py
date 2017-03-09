@@ -4,7 +4,11 @@ from django.contrib import admin
 
 from twitter_stream.models import *
     
-admin.site.register(tweet)
-admin.site.register(account) #removed ...  , account_Admin)
+class TweetAdmin(admin.ModelAdmin): # lets you search for tweets on the admin page
+    list_display=('tweet_text','tweet_handle','tweet_created','tweet_pin')
+    search_fields=['tweet_text','tweet_handle','tweet_created','tweet_pin']
+
+admin.site.register(tweet,TweetAdmin)
+admin.site.register(account) 
 admin.site.register(hashtag)
 admin.site.register(group)

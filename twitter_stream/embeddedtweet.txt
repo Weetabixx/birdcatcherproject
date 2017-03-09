@@ -4,3 +4,10 @@
     <a href="https://twitter.com/UoAEpi/status/839834548695367680">March 9, 2017</a>
 </blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-theme="dark">
+    <p lang="en" dir="ltr">In the antebellum United States---someone just traded a human being&#39;s friend.</p>&mdash;
+    Every Three Minutes (@Every3Minutes) 
+    <a href="https://twitter.com/Every3Minutes/status/839838945139699713">March 9, 2017</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
