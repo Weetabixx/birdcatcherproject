@@ -11,46 +11,35 @@
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     </head>
     <body>
+    
     <div class="page-header">
         <h1>Birdcatcher</h1>
     </div>
  
   
   
-       <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <p class="navbar-text" style="color: #000" > Homepage</p>
-    </div> 
-    <p class="navbar-text" style="color: #000"> No Group Found with that name exists sorry. Here are the available groups</p>  
-     <ul class="nav navbar-nav">
-      <li class="dropdown">
-        <a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">All groups 
-        <span class="caret"> </span></a>
-        <ul class="dropdown-menu">
-      {% for x in available_groups %} 
-            
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-text" style="color: #000" > Homepage</p>
+            </div> 
+            <p class="navbar-text" style="color: #000"> No Group Found with that name exists sorry. Here are the available groups</p>  
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">All groups 
+                        <span class="caret"> </span></a>
+                    <ul class="dropdown-menu">
+                        {% for x in available_groups %} 
+                        <li><a href="/{{ x }}">{{ x }}</a></li>
+                        {% endfor %}
+                    </ul>    
+                </li>
+            </ul>
+            <input class='btn  navbar-btn' action="action" type="button" value="Back" style ='color:black' onclick="history.go(-1);" /> 
+        </nav>
         
-          <li><a href="/{{ x }}">{{ x }}</a></li>
-        
-  
-             {% endfor %}
-          </ul>    
-      </li>
-      
- </ul> 
-
-   <input class='btn  navbar-btn' action="action" type="button" value="Back" style ='color:black' onclick="history.go(-1);" /> 
-  
-
-  </nav>
-        
-    <div>
-        <p>
-           
-         
-        </p>
-    
-    </div>
- 
+        <div>
+            <p>
+            </p>
+        </div>
     </body>

@@ -96,6 +96,14 @@ def home(request):
     return HttpResponse(template.render(context))
     
     
-def search(request,search_query):
-    pass
-
+def search(request, group, search_string):
+    #do the search bit
+    
+    
+    #return the page to the user
+    context = Context({}) # this would probably look simmilar to the context from the index.html
+    template = loader.get_template('search.html')
+    
+    return HttpResponse(template.render(context))
+    
+    

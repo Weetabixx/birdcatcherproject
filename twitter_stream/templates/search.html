@@ -66,32 +66,12 @@
                 </div>
             </div> 
         </nav>
-        
-        <div class="container-fluid" > <!-- this contains all of the tweets-->
-    
-            {% load twitter_stream_extras %}
-            {# loads custom filter to easily iterate over each element using list|index:n #}
-            {% for n in four %}
-            <div class="col-md-3"> <!-- this contains one collumn of tweets-->
-                {% for i in range %}
-                {% if i|remain:4 == n %}
-                <div ><!-- this contains one tweet-->
-                    {% autoescape off %}
-                    {% if i < pin_count %}
-                        <!-- do something if its pinned-->
-                     
-                        <img  src="http://files.softicons.com/download/system-icons/windows-8-metro-invert-icons-by-dakirby309/png/128x128/Other/Pin.png" style =" position: absolute; right: 15; width:30px; height:30px;  z-index:999;"></img>
-                    
-                    {% endif %}
-                    {{embedhtml|index:i}}
-                    {% endautoescape %}
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            {% endfor %}
-        </div>
-    </body> 
 
-         
+        <div class="container-fluid" > <!-- this contains all of the search content stuff-->
+
+
+
+        </div>
+ 
+    </body> 
 </html>
