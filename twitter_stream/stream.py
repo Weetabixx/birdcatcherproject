@@ -22,6 +22,9 @@ from threading import Thread
 import threading
 import requests.packages.urllib3
 from django.db import transaction
+import requests
+
+requests.packages.urllib3.disable_warnings()
 
 
 # Variables that contains the user credentials to access Twitter API
@@ -88,7 +91,7 @@ def store_tweet(status):
             if hasht.hashtag_group == group:
                 
                 #missing part, check if hashtag is in tweet... changed str(hasht) to str(hasht.hashtag_hash)
-                if hasht.hashtag_hash in str(status['text']):
+                if hasht.hashtag_hash in status['text'].encode('ascii', 'ignore').decode('ascii'):
                     print 'new post'
                     save_status(status)
 
@@ -164,7 +167,7 @@ def search_api():
         for handle in handlelist: # create a search for each handle
             searchq = 'from:' + handle.account_handle
             #temp_posts = twitter.search.tweets(q='from:@hm_morgan', result_type='recent', lang='en', count=4) # fix incase handlelist is empty
-            temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=10)
+            temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=1)
             result_list.append(temp_posts)
     except:
         pass

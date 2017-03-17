@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from datetime import datetime
 #from django.contrib.postgres.fields import ArrayField
-#from smart_selects.db_fields import ChainedForeignKey
+
 # Create your models here.
 
     
@@ -13,7 +13,7 @@ class group(models.Model):
     
     group_level = models.IntegerField() 
     
-    group_parent = models.ForeignKey("group", null = True, blank = True) 
+    group_parent = models.CharField(max_length=100, null = True, blank = True) 
     
     try:
         def __unicode__(self):
@@ -34,9 +34,7 @@ class tweet(models.Model):
     
     tweet_html = models.CharField(max_length=5000)
     
-    tweet_pin = models.ForeignKey("group", null=True,  blank = True)
-    
-    #tweet_pin = models.CharField(max_length=100, null=True,  blank = True, choices=[(x.group_name,x.group_name) for x in group.objects.all()])
+    tweet_pin = models.CharField(max_length=100, null=True,  blank = True, choices=[(x.group_name,x.group_name) for x in group.objects.all()])
     
     try:
         def __unicode__(self):
@@ -46,9 +44,7 @@ class tweet(models.Model):
     
 class account(models.Model):
     
-    #auto_increment_id = models.AutoField(primary_key=True)
-    
-    account_id = models.AutoField(primary_key=True)
+    account_id = models.IntegerField(primary_key=True)
     
     account_Name = models.CharField(max_length=100)
     
@@ -56,11 +52,7 @@ class account(models.Model):
     
     #Group_Choices =[(x.group_name,x.group_name) for x in group.objects.all()]
     
-    account_group = models.ForeignKey("group", null=True,  blank = True)
-    
-    #account_group = models.CharField(max_length=100, null = True)
-    
-    #account_group = models.CharField(max_length=100, null=True,  blank = True, choices=[(x.group_name,x.group_name) for x in group.objects.all()])
+    account_group = models.CharField(max_length=100, null=True,  blank = True, choices=Group_Choices)
     
     filter_by_hashtags = models.BooleanField(blank=False, null=False, default=True)
     
@@ -78,9 +70,7 @@ class hashtag(models.Model):
     
     hashtag_hash = models.CharField(primary_key=True, max_length=100, null=False)
     
-    hashtag_group = models.ForeignKey("group", null=True,  blank = True)
-    
-    #hashtag_group = models.CharField(max_length=100, null=True, choices=[(x.group_name,x.group_name) for x in group.objects.all()])
+    hashtag_group = models.CharField(max_length=100, null=True, choices=[(x.group_name,x.group_name) for x in group.objects.all()])
     
     try:
         def __unicode__(self):
