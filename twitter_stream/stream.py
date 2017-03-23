@@ -91,7 +91,7 @@ def store_tweet(status):
             #if hasht.hashtag_group == group:
                 
                 #missing part, check if hashtag is in tweet... changed str(hasht) to str(hasht.hashtag_hash)
-        if hasht.hashtag_hash in status['text'].encode('ascii', 'ignore').decode('ascii'):
+        if hasht.hashtag_hash in status['text'].encode('ascii', 'ignore').decode('ascii'): #remove emojis, because they return an error
             print 'new post'
             save_status(status)
 

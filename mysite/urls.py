@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^Admin', admin.site.urls),
     url(r'^Admin/', admin.site.urls),
+    url(r'^Search', twitter_stream.views.search, name='search'),
     url(r'^(?P<tgroup_name>\w{1,50})', twitter_stream.views.index, name='index'),
     url(r'^(?P<tgroup_name>\w{1,50})/', twitter_stream.views.index, name='index'),
     url(r'', twitter_stream.views.home, name='home'),

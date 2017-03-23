@@ -12,7 +12,7 @@ class group(models.Model):
     group_level = models.IntegerField(editable=False) 
     group_parent = models.ForeignKey("group", null = True, blank = True) 
     
-    def save(self):
+    def save(self): # auto add group level to be one higher than parent group
         if self.group_parent == None:
             self.group_level = 0
         else:

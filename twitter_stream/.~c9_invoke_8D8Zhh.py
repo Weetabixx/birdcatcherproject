@@ -7,7 +7,6 @@ import datetime
 import twitter_stream
 import stream
 import json
-from .forms import searchform
 
 # Create your views here.
 
@@ -93,7 +92,7 @@ def index(request, tgroup_name=''): #second param "group"
     groupnamewithoutunderscore = tgroup_name.replace("_", " ")
 # range in context is used for iterating over each tweet
    
-    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": tgroup_name, "available_groups": all_group_names, "pin_count": num_of_pins})
+    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "available_groups": all_group_names, "pin_count": num_of_pins})
 
        
     return HttpResponse(template.render(context))
@@ -108,43 +107,22 @@ def home(request):
     return HttpResponse(template.render(context))
     
     
-def search(request, group='', search_string=''):
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = searchform(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            group = form.cleaned_data['group']
-            search_string = form.cleaned_data['search_string']
-            
-            #retrieve tweets from db
-            tweet_data = get_group_tweets(group)
-            tweets = tweet_data[0]
-            all_group_names = tweet_data[1]
-            num_of_pins = tweet_data[2]
-            groupnamewithoutunderscore = group.replace("_", " ")
-            tweet_text = []
-            tweet_html = []
-            
-            #do the search bit
-            for t in tweets:
-                if len(tweet_text) < 200: # displaying more than 200 tweets does not display properly
-                    if search_string in t.tweet_handle:
-                        tweet_text.append(t.tweet_text)
-                        tweet_html.append(t.tweet_html)
-                    elif search_string in t.tweet_text:
-                        tweet_text.append(t.tweet_text)
-                        tweet_html.append(t.tweet_html)
-                    
-            
-            
-            #return the page to the user
-            context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": group, "available_groups": all_group_names}) # this looks simmilar to the context from the index.html
-            template = loader.get_template('search.html')
-            
-            return HttpResponse(template.render(context))
-    else:
-        form = searchform()
-    template = loader.get_template('index.html')
-    return render(request, 'search.html', {'form': form})
+def search(request, group, search_string):
+    #retrieve tweets from db
+    tweet_data = get_group_tweets(group)
+    tweets = tweet_data[0]
+    all_group_names = tweet_data[1]
+    num_of_pins = tweet_data[2]
+    
+    #do the search bit
+    for t in tweets:
+        i
+    
+    
+    #return the page to the user
+    context = Context({}) # this would probably look simmilar to the context from the index.html
+    template = loader.get_template('search.html')
+    
+    return HttpResponse(template.render(context))
+    
+    

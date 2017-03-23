@@ -69,7 +69,21 @@
 
         <div class="container-fluid" > <!-- this contains all of the search content stuff-->
 
-
+            {% load twitter_stream_extras %}
+            {# loads custom filter to easily iterate over each element using list|index:n #}
+            {% for n in four %} <!-- this contains one collumn of tweets-->
+            <div class="col-md-3">
+                {% for i in range %}
+                {% if i|remain:4 == n %}
+                <div>
+                    {% autoescape off %}
+                    {{embedhtml|index:i}}
+                    {% endautoescape %}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
 
         </div>
  
