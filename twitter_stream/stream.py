@@ -87,13 +87,13 @@ def store_tweet(status):
     hashtaglist = []
     hashtaglist = hashtag.objects.filter(hashtag_group__in = groups) # again can just use filter(hashtag_group__in =)
     for hasht in hashtaglist:
-        for group in groups:
-            if hasht.hashtag_group == group:
+        #for group in groups: # didnt need this for loop, already got only the correct hashtags with sql query
+            #if hasht.hashtag_group == group:
                 
                 #missing part, check if hashtag is in tweet... changed str(hasht) to str(hasht.hashtag_hash)
-                if hasht.hashtag_hash in status['text'].encode('ascii', 'ignore').decode('ascii'):
-                    print 'new post'
-                    save_status(status)
+        if hasht.hashtag_hash in status['text'].encode('ascii', 'ignore').decode('ascii'):
+            print 'new post'
+            save_status(status)
 
     
 #    new_entry = tweet()

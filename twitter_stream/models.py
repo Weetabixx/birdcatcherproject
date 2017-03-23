@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from datetime import datetime
-#from django.contrib.postgres.fields import ArrayField
-#from smart_selects.db_fields import ChainedForeignKey
+from django.contrib.postgres.fields import ArrayField
+#from smart_selects.db_fields import ChainedForeignKey have to add this to INSTALLED_APPS
 # Create your models here.
 
     
@@ -23,18 +23,18 @@ class group(models.Model):
     
 class tweet(models.Model):
     
-    tweet_id = models.IntegerField(primary_key=True)
+    tweet_id = models.IntegerField(primary_key=True, editable=False)
     
-    tweet_handle = models.CharField(max_length=100)
+    tweet_handle = models.CharField(max_length=100, editable=False)
     
-    tweet_text = models.CharField(max_length=145)
+    tweet_text = models.CharField(max_length=145, editable=False)
     
     #twitter returns "created_at":"Wed Aug 27 13:08:45 +0000 2008"
-    tweet_created = models.DateTimeField()
+    tweet_created = models.DateTimeField(editable=False)
     
-    tweet_html = models.CharField(max_length=5000)
+    tweet_html = models.CharField(max_length=5000, editable=False)
     
-    tweet_pin = models.ForeignKey("group", null=True,  blank = True)
+    tweet_pin = models.CharField(max_length=100, null=True,  blank = True)
     
     #tweet_pin = models.CharField(max_length=100, null=True,  blank = True, choices=[(x.group_name,x.group_name) for x in group.objects.all()])
     

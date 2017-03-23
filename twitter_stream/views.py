@@ -12,13 +12,14 @@ import json
 
 # Display the received tweets
 
-def index(request, group_name=''): #second param "group" 
+def index(request, tgroup_name=''): #second param "group" 
     all_groups = group.objects.all()    #checks to find group
     all_group_names = []
     group_found = False
+    target_group = group()
     for g_name in all_groups:
         all_group_names.append(str(g_name.group_name))
-        if str(g_name.group_name) == group_name:
+        if str(g_name.group_name) == tgroup_name:
             group_found = True  #found group
             target_group = g_name
     if group_found == False:
@@ -31,12 +32,12 @@ def index(request, group_name=''): #second param "group"
     #find all subgroups of given group
     num_of_groups = 0
     list_of_groups = []
-    list_of_groups.append(group_name)
+    list_of_groups.append(target_group)
     level = target_group.group_level + 1
     while len(list_of_groups) > num_of_groups: # 
         num_of_groups = len(list_of_groups)
         for group_object in [x for x in all_groups if x.group_level==level]:# iterates over each group in given list
-            if group_object.group_parent in list_of_groups:# could do more optimisation using sub lists for each level
+            if str(group_object.group_parent) in list_of_groups:# could do more optimisation using sub lists for each level
                 list_of_groups.append(group_object.group_name)
         level += 1
         
@@ -56,7 +57,7 @@ def index(request, group_name=''): #second param "group"
     pinned_tweets = []
     norm_tweets = []
     for t in tweets:
-        if t.tweet_pin == group_name:
+        if  t.tweet_pin == tgroup_name:
             pinned_tweets.append(t)
         else:
             norm_tweets.append(t)
@@ -78,7 +79,7 @@ def index(request, group_name=''): #second param "group"
         tweet_text.append(tot_tweets[n].tweet_text)
         
     template = loader.get_template('index.html')
-    groupnamewithoutunderscore = group_name.replace("_", " ")
+    groupnamewithoutunderscore = tgroup_name.replace("_", " ")
 # range in context is used for iterating over each tweet
    
     context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "available_groups": all_group_names, "pin_count": len(pinned_tweets)})
