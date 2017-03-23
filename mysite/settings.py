@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'twitter_stream',
+    'smart_selects',
 ]
 
 MIDDLEWARE_CLASSES = [

@@ -9,19 +9,24 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href= "{% static  'css/index.css' %}"/>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+        <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/images/favicon.ico"/>
     </head>
+
     <body>
-        <div class="page-header"  style=" height:70px; margin-bottom:0px">
-            <h1 style="float:left;margin-top:15px;font-weight:bold;color:white">{{groups}} </h1>
-            <img src="https://s29.postimg.org/sm08h4gwn/birdcatcher.png" style = " width: 70px; float:centre" ></img> 
+        <div class="page-header"  style=" height:95px; margin-bottom:0px overflow: hidden; padding-bottom: 25px; max-width:100%;">
+            <h1 style="float:left;margin-top:15px; margin-bottom:15px;font-weight:bold;color:white">{{groups}} </h1>
+            <img src="https://s29.postimg.org/sm08h4gwn/birdcatcher.png" style = "float:left; width:40px" ></img> 
         </div>
-        <nav class="navbar navbar-default " style =" top:0px;  width:100%; z-index:1000;" data-spy="affix" data-offset-top="57">
+        <nav class="navbar navbar-default " style =" top:0px;   width:100%; z-index:1000;" data-spy="affix" data-offset-top="57">
+            
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" style="float:right;">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>                        
             </button>
+            
             <div class="collapse navbar-collapse" id="myNavbar">
                 <div class="container-fluid">
                     
@@ -64,18 +69,18 @@
                     </form>
                     
                 </div>
-            </div> 
+            </div>
+            
         </nav>
-        
-        <div class="container-fluid" > <!-- this contains all of the tweets-->
+        <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 90 }'> <!-- this contains all of the tweets-->
     
             {% load twitter_stream_extras %}
             {# loads custom filter to easily iterate over each element using list|index:n #}
-            {% for n in four %}
-            <div class="col-md-3"> <!-- this contains one collumn of tweets-->
+            {% for n in four %} <!-- this contains one collumn of tweets-->
                 {% for i in range %}
                 {% if i|remain:4 == n %}
-                <div ><!-- this contains one tweet-->
+                <div class="grid-item" style="float: left; width: 20%; height: 20%;"><!-- this contains one tweet-->
+            
                     {% autoescape off %}
                     {% if i < pin_count %}
                         <!-- do something if its pinned-->
@@ -88,10 +93,10 @@
                 </div>
                 {% endif %}
                 {% endfor %}
-            </div>
             {% endfor %}
         </div>
     </body> 
+
 
          
 </html>

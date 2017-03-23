@@ -10,9 +10,9 @@ import json
 
 # Create your views here.
 
-# Display the received tweets
-
-def index(request, tgroup_name=''): #second param "group" 
+# returns a tuple of a list of tweets, the groups used and how many pinned tweets there are
+# , given the group. 
+def get_group_tweets(tgroup_name):
     all_groups = group.objects.all()    #checks to find group
     all_group_names = []
     group_found = False
@@ -67,6 +67,16 @@ def index(request, tgroup_name=''): #second param "group"
         tot_tweets.append(t)
     for t in norm_tweets:
         tot_tweets.append(t)
+    tweet_data = (tot_tweets, all_group_names, len(pinned_tweets))
+    return tweet_data
+
+# Display the received tweets
+
+def index(request, tgroup_name=''): #second param "group"
+    tweet_data = get_group_tweets(tgroup_name)
+    tot_tweets = tweet_data[0]
+    all_group_names = tweet_data[1]
+    num_of_pins = tweet_data[2]
         
     # Define arrays
     tweet_text = []
@@ -74,7 +84,7 @@ def index(request, tgroup_name=''): #second param "group"
     
     # Iterate through the tweets
     
-    for n in range(min(len(tot_tweets),200)): # displaying more than 200 tweets does not display properly
+    for n in range(min(len(tot_tweets),50)): # displaying more than 200 tweets does not display properly
         tweet_html.append(tot_tweets[n].tweet_html)
         tweet_text.append(tot_tweets[n].tweet_text)
         
@@ -82,7 +92,7 @@ def index(request, tgroup_name=''): #second param "group"
     groupnamewithoutunderscore = tgroup_name.replace("_", " ")
 # range in context is used for iterating over each tweet
    
-    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "available_groups": all_group_names, "pin_count": len(pinned_tweets)})
+    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "available_groups": all_group_names, "pin_count": num_of_pins})
 
        
     return HttpResponse(template.render(context))
@@ -99,6 +109,7 @@ def home(request):
     
 def search(request, group, search_string):
     #do the search bit
+    tweet_data = get_group_tweets(group)
     
     
     #return the page to the user
