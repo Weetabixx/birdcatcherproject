@@ -9,9 +9,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href= "{% static  'css/index.css' %}"/>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-        <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
-       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/images/favicon.ico"/>
+        <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+        <script src="https://unpkg.com/imagesloaded@4.1/imagesloaded.pkgd.js"></script>
     </head>
 
     <body>
@@ -61,12 +61,12 @@
                         <li><a href="/admin"> Admin <span class="glyphicon glyphicon-cog"></span></a></li>
                     </ul>
                     
-                    <form action="/Search/{{group_name}}" method="post" class="navbar-form navbar-right">{% csrf_token %}
+                    <form action="/Search/" method="POST" class="navbar-form navbar-right">{% csrf_token %}
                         <div class="form-group">
                             
                             
                             <input type="text" name="search_string" id="search_string" class="form-control" placeholder="Search for tweet">
-                            
+                            <input type="hidden" name="group" value="{{group_name}}" class="form-control"> 
                         </div>
                         <button type="submit" value="ok" class="btn btn-default">Search</button>
                     </form>
@@ -75,29 +75,68 @@
             </div>
             
         </nav>
-        <div class="container-fluid">
+        <div class="grid" data-isotope='{ "itemSelector": ".grid-item", "layoutMode": "masonry" }'> <!-- this contains all of the tweets-->
+    
             {% load twitter_stream_extras %}
             {# loads custom filter to easily iterate over each element using list|index:n #}
-            {% for n in four %} <!-- this contains one collumn of tweets-->
-            <div class="col-md-3">
+            <div class="grid-sizer">
                 {% for i in range %}
-                {% if i|remain:4 == n %}
-                <div>
-                    {% autoescape off %}
-                    {% if i < pin_count %}
-                        <!-- do something if its pinned-->
-                     
-                        <img  src="http://files.softicons.com/download/system-icons/windows-8-metro-invert-icons-by-dakirby309/png/128x128/Other/Pin.png" style =" position: absolute; right: 15; width:30px; height:30px;  z-index:999;"></img>
-                    
-                    {% endif %}
-                    {{embedhtml|index:i}}
-                    {% endautoescape %}
-                </div>
-                {% endif %}
+                    <div class="grid-item"><!-- this contains one tweet-->
+            
+                        {% autoescape off %}
+                        {% if i < pin_count %}
+                            <!-- do something if its pinned-->
+                            <img  src="http://files.softicons.com/download/system-icons/windows-8-metro-invert-icons-by-dakirby309/png/128x128/Other/Pin.png" style =" position: absolute; right: 15; width:30px; height:30px;  z-index:999;"></img>
+                        {% endif %}
+                        {{embedhtml|index:i}}
+                        {% endautoescape %}
+                    </div>
                 {% endfor %}
             </div>
-            {% endfor %}
         </div>
+        
+        <script>//include twitter api, firefox works better, chrome worse, safari still not working
+        // Performant asynchronous method of loading widgets.js
+            window.twttr = (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+                if (d.getElementById(id)) return t;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "https://platform.twitter.com/widgets.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            
+                t._e = [];
+                t.ready = function(f) {
+                    t._e.push(f);
+                };
+        
+                return t;
+            }(document, "script", "twitter-wjs"));
+        </script>
+
+        
+        <script type="text/javascript">//on loaded, execute isotope
+        /* global $ */
+        /* global twttr */
+        
+        
+        twttr.ready(function (twttr) {
+            // At this point the widget.js file had been loaded.
+            // We can now make use of the twttr events
+            twttr.events.bind('loaded', function (event) {
+                // At this point all tweets have been fully loaded
+                // and rendered and you we can proceed with our Javascript
+                $('.grid').isotope({
+                    itemSelector: '.grid-item',
+                    masonry: {
+                        fitWidth: true
+                    }
+                });
+            });
+        });
+        
+        </script>
     </body> 
 
 

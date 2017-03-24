@@ -33,3 +33,21 @@ h1{
     width: 100px;
 }
 
+.grid {
+  margin: 0 auto;
+}
+
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.grid-sizer,
+
+.grid-item{
+    float: left;
+    width: 300px;
+    padding: 0px 10px 0px 10px;
+}
+.grid-item--width2 { width: 50%; }
