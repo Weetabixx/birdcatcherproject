@@ -53,6 +53,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'twitter_stream.middleware.browserDetection',
 ]
 
 ROOT_URLCONF = 'mysite.urls'

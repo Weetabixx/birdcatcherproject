@@ -1,0 +1,123 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {# load bootstrap 3 stylesheets and index.css#}     
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href= "{% static  'css/index.css' %}"/>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+        <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/images/favicon.ico"/>
+        <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+        <script src="https://unpkg.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
+    </head>
+
+    <body>
+        <div class="page-header"  style=" height:95px; margin-bottom:0px overflow: hidden; padding-bottom: 25px; max-width:100%;">
+            <h1 style="float:left;margin-top:15px; margin-bottom:15px;font-weight:bold;color:white">{{groups}} </h1>
+            <img src="https://s29.postimg.org/sm08h4gwn/birdcatcher.png" style = "float:left; width:40px" ></img> 
+        </div>
+        <nav class="navbar navbar-default " style =" top:0px;   width:100%; z-index:1000;" data-spy="affix" data-offset-top="57">
+            
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" style="float:right;">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                        
+            </button>
+            
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <div class="container-fluid">
+                    
+                    <ul class="nav navbar-nav">
+                        <li> <a href="/"> Home </a></li>
+                        <li><a href="#">#hsru</a></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">All Hashtags
+                            <span class="caret"> </span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">hashtag 1</a></li>
+                                <li><a href="#">hashtag 2 </a></li>
+                                <li><a href="#">hashtag 3</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <ul class="nav navbar-nav" >
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">All groups 
+                                <span class="caret"> </span></a>
+                            <ul class="dropdown-menu">
+                                {% for x in available_groups %} 
+                                    <li><a href="/{{ x }}">{{ x }}</a></li>
+                                {% endfor %}
+                            </ul>    
+                        </li>
+                  
+                    </ul> 
+                    <ul class="nav navbar-nav navbar-right">
+                        <p class="navbar-text navbar-left" style="color: #000"></p>
+                        <li><a href="/admin"> Admin <span class="glyphicon glyphicon-cog"></span></a></li>
+                    </ul>
+                    
+                    <form action="/Search/" method="POST" class="navbar-form navbar-right">{% csrf_token %}
+                        <div class="form-group">
+                            
+                            
+                            <input type="text" name="search_string" id="search_string" class="form-control" placeholder="Search for tweet">
+                            <input type="hidden" name="group" value="{{group_name}}" class="form-control"> 
+                        </div>
+                        <button type="submit" value="ok" class="btn btn-default">Search</button>
+                    </form>
+                    
+                </div>
+            </div>
+            
+        </nav>
+        <div class="grid" data-isotope='{ "itemSelector": ".grid-item", "layoutMode": "masonry" }'> <!-- this contains all of the tweets-->
+    
+            {% load twitter_stream_extras %}
+            {# loads custom filter to easily iterate over each element using list|index:n #}
+            <div class="grid-sizer">
+                {% for i in range %}
+                    <div class="grid-item"><!-- this contains one tweet-->
+            
+                        {% autoescape off %}
+                        {% if i < pin_count %}
+                            <!-- do something if its pinned-->
+                            <img  src="http://files.softicons.com/download/system-icons/windows-8-metro-invert-icons-by-dakirby309/png/128x128/Other/Pin.png" style =" position: absolute; right: 15; width:30px; height:30px;  z-index:999;"></img>
+                        {% endif %}
+                        {{embedhtml|index:i}}
+                        {% endautoescape %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <script type="text/javascript">//on loaded, execute isotope
+        /* global $ */
+        /* global twttr */
+        
+        
+        twttr.ready(function (twttr) {
+            // At this point the widget.js file had been loaded.
+            // We can now make use of the twttr events
+            twttr.events.bind('loaded', function (event) {
+                // At this point all tweets have been fully loaded
+                // and rendered and you we can proceed with our Javascript
+                $('.grid').isotope({
+                    itemSelector: '.grid-item',
+                    masonry: {
+                        fitWidth: true
+                    }
+                });
+            });
+        });
+        
+        </script>
+    </body> 
+
+
+         
+</html>

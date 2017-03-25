@@ -8,6 +8,7 @@ import twitter_stream
 import stream
 import json
 from .forms import searchform
+from middleware import browserDetection
 
 # Create your views here.
 
@@ -85,15 +86,20 @@ def index(request, tgroup_name=''): #second param "group"
     
     # Iterate through the tweets
     
-    for n in range(min(len(tot_tweets),50)): # displaying more than 200 tweets does not display properly
+    for n in range(min(len(tot_tweets),20)): # displaying more than 200 tweets does not display properly
         tweet_html.append(tot_tweets[n].tweet_html)
         tweet_text.append(tot_tweets[n].tweet_text)
         
-    template = loader.get_template('index.html')
+    if request.chrome:
+        print 'loading chrome version'
+        template = loader.get_template('indexc.html')
+    else:
+        print 'lloading none chrome version'
+        template = loader.get_template('index.html')
     groupnamewithoutunderscore = tgroup_name.replace("_", " ")
 # range in context is used for iterating over each tweet
    
-    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": tgroup_name, "available_groups": all_group_names, "pin_count": num_of_pins})
+    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": tgroup_name, "available_groups": all_group_names, "pin_count": num_of_pins})
 
        
     return HttpResponse(template.render(context))
@@ -136,15 +142,19 @@ def search(request, group='', search_string=''):
                     elif search_string in t.tweet_text:
                         tweet_text.append(t.tweet_text)
                         tweet_html.append(t.tweet_html)
-                    
-            
             
             #return the page to the user
-            context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "four": range(4), "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": group, "available_groups": all_group_names}) # this looks simmilar to the context from the index.html
+
+            context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": group, "available_groups": all_group_names}) # this looks simmilar to the context from the index.html
             template = loader.get_template('search.html')
             
             return HttpResponse(template.render(context))
     else:
         form = searchform()
-    template = loader.get_template('index.html')
+    if request.chrome:
+        print 'loading chrome version'
+        template = loader.get_template('indexc.html')
+    else:
+        print 'lloading none chrome version'
+        template = loader.get_template('index.html')
     return render(request, 'search.html', {'form': form})
