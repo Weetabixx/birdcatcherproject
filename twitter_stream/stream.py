@@ -24,7 +24,7 @@ import requests.packages.urllib3
 from django.db import transaction
 import requests
 
-requests.packages.urllib3.disable_warnings()
+#requests.packages.urllib3.disable_warnings()
 
 # Variables that contains the user credentials to access Twitter API
 ACCESS_TOKEN = '235228993-UMgntnuS8UKyGU7pitxvMNxQO4Eqte2tgAGk9ijK'
