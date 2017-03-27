@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,17 +7,16 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href= "{% static  'css/index.css' %}"/>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-        <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/images/favicon.ico"/>
-        <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+        <link rel="stylesheet" href= "{% static 'css/index.css' %}"/>
+        <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+        <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
         <script src="https://unpkg.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
     </head>
 
     <body>
         <div class="page-header"  style=" height:95px; margin-bottom:0px overflow: hidden; padding-bottom: 25px; max-width:100%;">
             <h1 style="float:left;margin-top:15px; margin-bottom:15px;font-weight:bold;color:white">{{groups}} </h1>
-            <img src="https://s29.postimg.org/sm08h4gwn/birdcatcher.png" style = "float:left; width:40px" ></img> 
+            <img src="{% static 'images/bird.png' %}" style = "float:left; width:40px" ></img> 
         </div>
         <nav class="navbar navbar-default " style =" top:0px;   width:100%; z-index:1000;" data-spy="affix" data-offset-top="57">
             
@@ -86,7 +85,7 @@
                         {% autoescape off %}
                         {% if i < pin_count %}
                             <!-- do something if its pinned-->
-                            <img  src="http://files.softicons.com/download/system-icons/windows-8-metro-invert-icons-by-dakirby309/png/128x128/Other/Pin.png" style =" position: absolute; right: 15; width:30px; height:30px;  z-index:999;"></img>
+                            <img  src="{% static 'images/pin.png' %}" style =" position: absolute; right: 15; width:30px; height:30px;  z-index:999;"></img>
                         {% endif %}
                         {{embedhtml|index:i}}
                         {% endautoescape %}
@@ -95,11 +94,37 @@
             </div>
         </div>
         
+        <p><button class="append-button">Append items</button></p>
+        
+        <script> //tried loazy loading 20 times at a time with button
+            /* global $ */
+            /* global getItemElement */
+            //count = 9
+            $('.append-button').on( 'click', function() {
+                // create new item elements
+                //for n in 10:
+                //    count += 1
+                    var $items = getItemElement();
+                    // append elements to container
+                    $('.grid').append( $items )
+                    // add and lay out newly appended elements
+                    .isotope( 'appended', $items );
+            });
+            
+            function getItemElement() {
+                var $item = $('<div class="grid-item">{{embedhtml|index:10}}</div>'); //tweet here, not sure how to use count from script for template
+                // add width and height class
+                //$item.addClass( 'grid-item--width' ).addClass( 'grid-item--height' );
+                return $item;
+            }
+        </script>
+        
+        
         <script>//include twitter api, firefox and safari work better, chrome worse
         // Performant asynchronous method of loading widgets.js
             window.twttr = (function(d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0],
-                t = window.twttr || {};
+                    t = window.twttr || {};
                 if (d.getElementById(id)) return t;
                 js = d.createElement(s);
                 js.id = id;
@@ -110,7 +135,7 @@
                 t.ready = function(f) {
                     t._e.push(f);
                 };
-        
+            
                 return t;
             }(document, "script", "twitter-wjs"));
         </script>
