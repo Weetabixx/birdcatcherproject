@@ -60,11 +60,11 @@
                         <li><a href="/admin"> Admin <span class="glyphicon glyphicon-cog"></span></a></li>
                     </ul>
                     
-                    <form action="/Search/" method="POST" class="navbar-form navbar-right">{% csrf_token %}
+                    <form action="/Search/" method="get" class="navbar-form navbar-right">
                         <div class="form-group">
+                            {{form}}
                             
                             
-                            <input type="text" name="search_string" id="search_string" class="form-control" placeholder="Search for tweet">
                             <input type="hidden" name="group" value="{{group_name}}" class="form-control"> 
                         </div>
                         <button type="submit" value="ok" class="btn btn-default">Search</button>
@@ -112,7 +112,7 @@
             });
             
             function getItemElement() {
-                var $item = $('<div class="grid-item">{{embedhtml|index:10}}</div>'); //tweet here, not sure how to use count from script for template
+                var $item = $('<div class="grid-item"></div>'); //tweet here, not sure how to use count from script for template
                 // add width and height class
                 //$item.addClass( 'grid-item--width' ).addClass( 'grid-item--height' );
                 return $item;

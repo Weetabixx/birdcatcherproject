@@ -98,14 +98,18 @@ def index(request, tgroup_name=''): #second param "group"
         template = loader.get_template('index.html')
     groupnamewithoutunderscore = tgroup_name.replace("_", " ")
 # range in context is used for iterating over each tweet
+
+    #create form for search
+    form = searchform()
    
-    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": tgroup_name, "available_groups": all_group_names, "pin_count": num_of_pins})
+    context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": tgroup_name, "available_groups": all_group_names, "pin_count": num_of_pins, "form": form})
 
        
     return HttpResponse(template.render(context))
     
 def home(request):
     all_groups = group.objects.all()
+    
     context = Context({"available_groups": all_groups})   
    
     template = loader.get_template('home.html')  # if nothing in q then just load home 
@@ -115,14 +119,16 @@ def home(request):
     
     
 def search(request, group='', search_string=''):
-    if request.method == 'POST':
+    if request.method == 'GET':
         # create a form instance and populate it with data from the request:
-        form = searchform(request.POST)
-        # check whether it's valid:
+        form = searchform(request.GET)
         if form.is_valid():
+        
             # process the data in form.cleaned_data as required
             group = form.cleaned_data['group']
             search_string = form.cleaned_data['search_string']
+            print group
+            print search_string
             
             #retrieve tweets from db
             tweet_data = get_group_tweets(group)
@@ -144,13 +150,19 @@ def search(request, group='', search_string=''):
                         tweet_html.append(t.tweet_html)
             
             #return the page to the user
-
-            context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": group, "available_groups": all_group_names}) # this looks simmilar to the context from the index.html
-            template = loader.get_template('search.html')
+    
+            context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": group, "available_groups": all_group_names, "form": form}) # this looks simmilar to the context from the index.html
+            if request.chrome:
+                print 'loading chrome version'
+                template = loader.get_template('indexc.html')
+            else:
+                print 'lloading none chrome version'
+                template = loader.get_template('index.html')
             
             return HttpResponse(template.render(context))
     else:
         form = searchform()
+        return HttpResponseRedirect('')
     if request.chrome:
         print 'loading chrome version'
         template = loader.get_template('indexc.html')
