@@ -18,7 +18,7 @@ def get_group_tweets(tgroup_name):
     all_groups = group.objects.all()    #checks to find group
     all_group_names = []
     group_found = False
-    target_group = group()
+    target_group = group() #what is group()
     for g_name in all_groups:
         all_group_names.append(str(g_name.group_name))
         if str(g_name.group_name) == tgroup_name:
@@ -28,14 +28,14 @@ def get_group_tweets(tgroup_name):
         template = loader.get_template('noGroupFound.html')
         #response if there was no such group
         context = Context({"available_groups": all_group_names})
-        return HttpResponse(template.render(context))
+        return HttpResponse(template.render(context)) #error message Int has no .lower, wrong type?
     
 
     #find all subgroups of given group
     num_of_groups = 0
     list_of_groups = []
     list_of_groups.append(target_group)
-    level = target_group.group_level + 1
+    level = target_group.group_level + 1 #error message NoneType + Int
     while len(list_of_groups) > num_of_groups: # 
         num_of_groups = len(list_of_groups)
         for group_object in [x for x in all_groups if x.group_level==level]:# iterates over each group in given list
