@@ -24,7 +24,7 @@ import requests.packages.urllib3
 from django.db import transaction
 import requests
 
-#requests.packages.urllib3.disable_warnings()
+requests.packages.urllib3.disable_warnings()
 
 # Variables that contains the user credentials to access Twitter API
 ACCESS_TOKEN = '235228993-UMgntnuS8UKyGU7pitxvMNxQO4Eqte2tgAGk9ijK'
@@ -136,12 +136,8 @@ def stream_api():
         handlelistx = account.objects.all()
         #track_handlelist = [str(x.account_handle) for x in handlelistx ]
         follow_handlelist = [str(api.get_user(screen_name = str(x.account_handle)[1:]).id) for x in handlelistx ]
-        print follow_handlelist
+        #print follow_handlelist
         #print "tracking"
-        #user = api.get_user(screen_name = 'WuWaikai')
-        #user2 = api.get_user(screen_name = 'Every3Minutes')
-        #user3 = api.get_user(screen_name = 'notiven')
-        #print user.id
         #stream.filter(track = str(track_handlelist))0
         stream.filter(follow = follow_handlelist)
         #stream.filter(follow = [str(user.id), str(user2.id), str(user3.id)], async=True)

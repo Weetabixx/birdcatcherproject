@@ -25,9 +25,11 @@ urlpatterns = [
     url(r'^Admin', admin.site.urls),
     url(r'^Admin/', admin.site.urls),
     url(r'^Search', twitter_stream.views.search, name='search'),
+    url(r'^noGroupFound', twitter_stream.views.noGroup, name="noGroup" ),
     url(r'^(?P<tgroup_name>\w{1,50})', twitter_stream.views.index, name='index'),
     url(r'^(?P<tgroup_name>\w{1,50})/', twitter_stream.views.index, name='index'),
     url(r'', twitter_stream.views.home, name='home'),
+    #url(r'^noGroupFound', twitter_stream.views.noGroup, name="noGroup" ),
    # url(r'^(?P<q>[\w-]+/?)', twitter_stream.views.home, name='home'),
     #url(r'^$', twitter_stream.views.index, name='index'),
 ]

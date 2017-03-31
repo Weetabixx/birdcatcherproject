@@ -8,59 +8,83 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href= "{% static  'css/index.css' %}"/>
         <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+        <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+        <script src="https://unpkg.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
     </head>
-    <body background="http://gdurl.com/TD2x" style=" background-color:#1bc0e0; background-repeat: no-repeat; background-size:cover">
-        <div class="page-header" style="height:70px">
-            <img src="https://s29.postimg.org/sm08h4gwn/birdcatcher.png" style = "width: 70px; height: 65px;margin-left:46%" ></img> 
+    <body>
+        <div class="page-header"  style=" height:80px; margin-bottom:0px overflow: hidden; max-width:100%;">
+            <h1 style="float:left; margin-top: 17px; margin-bottom: 15px; font-weight:bold;color:white">Homepage</h1>
+            <img src="{% static 'images/bird.png' %}" style = "width: 70px; height: 65px; margin-left: 0 auto, margin-right: 0 auto" ></img> 
         </div>
-        <nav class="navbar navbar-default " >
-            <div class="container-fluid">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" style="float:right;">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>                        
-                </button>
-                <div class="navbar-header">
-                    <p class="navbar-text" style="color: #000" > Homepage</p>
-                </div>
-        
-         
-                <div class="collapse navbar-collapse" id="myNavbar">
-    
-                    <ul class="nav navbar-nav">
+        <nav class="navbar navbar-default " style =" top:0px;   width:100%; z-index:1000;" data-spy="affix" data-offset-top="57">
+            
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" style="float:right;">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                        
+            </button>
+            
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <div class="container-fluid">
+                    
+
+                    
+                    <ul class="nav navbar-nav" >
                         <li class="dropdown">
                             <a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">All groups 
                                 <span class="caret"> </span></a>
                             <ul class="dropdown-menu">
                                 {% for x in available_groups %} 
-                            
-                        
-                                <li><a href="/{{ x }}">{{ x }}</a></li>
-                        
-                  
+                                    <li><a href="/{{ x }}">{{ x }}</a></li>
                                 {% endfor %}
                             </ul>    
                         </li>
+                  
                     </ul> 
-    
-                <ul class="nav navbar-nav navbar-right">
-                    <p class="navbar-text navbar-left" style="color: #000"></p>
-                    <li><a href="admin/"> Admin <span class="glyphicon glyphicon-cog"></span></a></li>
-                </ul>
-            </div> 
-        </nav>
-    
-        
-        <div class="container-fluid bg-grey">
-            <div class="row">
-                <div class="col-sm-4">
-                </div>
-                <div class="col-sm-8" >
-                    <h2>About us</h2><br>
-                    <p> we capture tweets </p>
+                    <ul class="nav navbar-nav navbar-right">
+                        <p class="navbar-text navbar-left" style="color: #000"></p>
+                        <li><a href="/admin"> Admin <span class="glyphicon glyphicon-cog"></span></a></li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </nav>
         
+        <div class="grid" data-isotope='{ "itemSelector": ".grid-item2", "layoutMode": "masonry" }'>
+            <div class="grid-item2">
+               <iframe class="embed-responsive-item" src="/Aberdeen_University" width="500" height="500" scrolling="no" frameborder="1"></iframe> 
+                <a class="d" href="/Aberdeen_University" style="position:absolute; top:0; left:0; display:inline-block; width:500px; height:500px; z-index:5;"></a>
+            </div>
+
+            <div class="grid-item2">
+                <iframe class="embed-responsive-item" src="/Aberdeen_HSRU" width="500" height="500" scrolling="no" frameBorder="1"></iframe>
+                <a class="d" href="/Aberdeen_HSRU" style="position:absolute; top:0; left:0; display:inline-block; width:500px; height:500px; z-index:5;"></a>
+            </div>
+          
+            <div class="grid-item2">    
+                <iframe class="embed-responsive-item" src="/Aberdeen_CLSM" width="500" height="500" scrolling="no" frameBorder="1"></iframe>
+                <a class="d" href="/Aberdeen_CLSM" style="position:absolute; top:0; left:0; display:inline-block; width:500px; height:500px; z-index:5;"></a>
+            </div>
+        </div>
+<style> 
+
+/*a.d:hover{
+    border-style: solid;
+    border-width: 3px;
+    opacity: 0.2;
+    background-color:grey;
+}*/
+
+</style>
+        <script type="text/javascript">
+            /* global $ */
+            $('.grid').isotope({
+                itemSelector: '.grid-item2',
+                masonry: {
+                    columnWidth: 500,
+                    isFitWidth: true,
+                }
+            });
+        </script>
+
     
     </body>

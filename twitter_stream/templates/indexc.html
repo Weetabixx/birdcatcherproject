@@ -14,6 +14,22 @@
     </head>
 
     <body>
+        <script>window.twttr = (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+          if (d.getElementById(id)) return t;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs);
+        
+          t._e = [];
+          t.ready = function(f) {
+            t._e.push(f);
+          };
+        
+          return t;
+        }(document, "script", "twitter-wjs"));</script>
         <div class="page-header"  style=" height:95px; margin-bottom:0px overflow: hidden; padding-bottom: 25px; max-width:100%;">
             <h1 style="float:left;margin-top:15px; margin-bottom:15px;font-weight:bold;color:white">{{groups}} </h1>
             <img src="{% static 'images/bird.png' %}" style = "float:left; width:40px" ></img> 

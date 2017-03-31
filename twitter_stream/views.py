@@ -9,6 +9,7 @@ import stream
 import json
 from .forms import searchform
 from middleware import browserDetection
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -27,6 +28,7 @@ def get_group_tweets(tgroup_name):
     if group_found == False:
         template = loader.get_template('noGroupFound.html')
         #response if there was no such group
+        return redirect("/noGroupFound")
         context = Context({"available_groups": all_group_names})
         return HttpResponse(template.render(context)) #error message Int has no .lower, wrong type?
     
@@ -69,13 +71,29 @@ def get_group_tweets(tgroup_name):
         tot_tweets.append(t)
     for t in norm_tweets:
         tot_tweets.append(t)
-    tweet_data = (tot_tweets, all_group_names, len(pinned_tweets))
+    for t in tot_tweets:
+        t.tweet_html = t.tweet_html.split("<script>")[0]
+    tweet_data = (tot_tweets, all_group_names, len(pinned_tweets),)
     return tweet_data
+    
+
+# if no group, re-go to nogroupfound.html
+def noGroup(request):
+    template = loader.get_template('noGroupFound.html')
+    all_groups = group.objects.all()
+    all_group_names = []
+    for g_name in all_groups:
+        all_group_names.append(str(g_name.group_name))
+    context = Context({"available_groups": all_group_names})
+    return HttpResponse(template.render(context))
+    
 
 # Display the received tweets
 
 def index(request, tgroup_name=''): #second param "group"
     tweet_data = get_group_tweets(tgroup_name)
+    if type(tweet_data) is HttpResponseRedirect:
+        return tweet_data
     tot_tweets = tweet_data[0]
     all_group_names = tweet_data[1]
     num_of_pins = tweet_data[2]
@@ -86,16 +104,16 @@ def index(request, tgroup_name=''): #second param "group"
     
     # Iterate through the tweets
     
-    for n in range(min(len(tot_tweets),20)): # displaying more than 200 tweets does not display properly
+    for n in range(min(len(tot_tweets),200)): # displaying more than 200 tweets does not display properly
         tweet_html.append(tot_tweets[n].tweet_html)
         tweet_text.append(tot_tweets[n].tweet_text)
         
-    if request.chrome:
-        print 'loading chrome version'
-        template = loader.get_template('indexc.html')
-    else:
-        print 'lloading none chrome version'
-        template = loader.get_template('index.html')
+    #if request.chrome:
+    #    print 'loading chrome version'
+    #    template = loader.get_template('indexc.html')
+    #else:
+    #    print 'lloading none chrome version'
+    template = loader.get_template('index.html')
     groupnamewithoutunderscore = tgroup_name.replace("_", " ")
 # range in context is used for iterating over each tweet
 
@@ -132,6 +150,8 @@ def search(request, group='', search_string=''):
             
             #retrieve tweets from db
             tweet_data = get_group_tweets(group)
+            if type(tweet_data) is HttpResponseRedirect:
+                return tweet_data
             tweets = tweet_data[0]
             all_group_names = tweet_data[1]
             num_of_pins = tweet_data[2]
@@ -152,21 +172,21 @@ def search(request, group='', search_string=''):
             #return the page to the user
     
             context = Context({"embedhtml":tweet_html, "tweet": tweet_text, "range": range(len(tweet_text)), "groups": groupnamewithoutunderscore, "group_name": group, "available_groups": all_group_names, "form": form}) # this looks simmilar to the context from the index.html
-            if request.chrome:
-                print 'loading chrome version'
-                template = loader.get_template('indexc.html')
-            else:
-                print 'lloading none chrome version'
-                template = loader.get_template('index.html')
+            #if request.chrome:
+            #    print 'loading chrome version'
+            #    template = loader.get_template('indexc.html')
+            #else:
+            #    print 'lloading none chrome version'
+            template = loader.get_template('index.html')
             
             return HttpResponse(template.render(context))
     else:
         form = searchform()
         return HttpResponseRedirect('')
-    if request.chrome:
-        print 'loading chrome version'
-        template = loader.get_template('indexc.html')
-    else:
-        print 'lloading none chrome version'
-        template = loader.get_template('index.html')
+    #if request.chrome:
+    #    print 'loading chrome version'
+    #    template = loader.get_template('indexc.html')
+    #else:
+    #    print 'lloading none chrome version'
+    template = loader.get_template('index.html')
     return render(request, 'search.html', {'form': form})

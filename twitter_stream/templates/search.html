@@ -11,6 +11,22 @@
         <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
     </head>
     <body>
+        <script>window.twttr = (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+          if (d.getElementById(id)) return t;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs);
+        
+          t._e = [];
+          t.ready = function(f) {
+            t._e.push(f);
+          };
+        
+          return t;
+        }(document, "script", "twitter-wjs"));</script>
         <div class="page-header"  style=" height:70px; margin-bottom:0px">
             <h1 style="float:left;margin-top:15px;font-weight:bold;color:white">{{groups}} </h1>
             <img src="https://s29.postimg.org/sm08h4gwn/birdcatcher.png" style = " width: 70px; float:centre" ></img> 
