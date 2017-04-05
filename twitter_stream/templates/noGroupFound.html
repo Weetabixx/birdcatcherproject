@@ -9,19 +9,18 @@
         <link rel="stylesheet" href= "{% static  'css/index.css' %}"/>
         <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
     </head>
-    <body background="http://1.bp.blogspot.com/-meNDkXM9A5w/U3FL9lBcp_I/AAAAAAAAAPY/IRlAGVL9FIQ/s1600/No+Group.png" style="background-repeat: round;">
+    <!---<body background="http://1.bp.blogspot.com/-meNDkXM9A5w/U3FL9lBcp_I/AAAAAAAAAPY/IRlAGVL9FIQ/s1600/No+Group.png" style="background-repeat: round;">--->
     
-  <div class="page-header" style="height:70px">
-            <img src="https://s29.postimg.org/sm08h4gwn/birdcatcher.png" style = "width: 70px; height: 65px;margin-left:46%" ></img> 
+  <div class="page-header" style="height:80px">
+            <img src="{% static 'images/bird.png' %}" style = "width: 70px; height: 65px; margin-left:48%"></img> 
         </div>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <p class="navbar-text" style="color: #000" > NO-GROUP-FOUND </p>
-            </div> 
-            <p class="navbar-text" style="color: #000"> Their are no groups Found with that name sorry. Here are the available groups</p>  
             <ul class="nav navbar-nav">
                 <li> <a href="/"> Home </a></li>
+            </ul>
+            <p class="navbar-text" style="color: #000"> There is no group with that name. Here are the available groups</p>  
+            <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">All groups 
                         <span class="caret"> </span></a>
@@ -32,7 +31,10 @@
                     </ul>    
                 </li>
             </ul>
-     
+            <ul class="nav navbar-nav navbar-right">
+                <p class="navbar-text navbar-left" style="color: #000"></p>
+                <li><a href="/admin"> Admin <span class="glyphicon glyphicon-cog"></span></a></li>
+            </ul>
         </nav>
         
         <div>

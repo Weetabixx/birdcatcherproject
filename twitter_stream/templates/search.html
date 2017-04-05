@@ -10,7 +10,7 @@
         <link rel="stylesheet" href= "{% static  'css/index.css' %}"/>
         <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
     </head>
-    <body>
+     <body>
         <script>window.twttr = (function(d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0],
             t = window.twttr || {};
@@ -27,31 +27,24 @@
         
           return t;
         }(document, "script", "twitter-wjs"));</script>
-        <div class="page-header"  style=" height:70px; margin-bottom:0px">
-            <h1 style="float:left;margin-top:15px;font-weight:bold;color:white">{{groups}} </h1>
-            <img src="https://s29.postimg.org/sm08h4gwn/birdcatcher.png" style = " width: 70px; float:centre" ></img> 
+        
+        <div class="page-header"  style=" height:80px; margin-bottom:0px overflow: hidden; padding-bottom: 25px; max-width:100%;">
+            <h1 style="float:left; margin-top:17px; margin-bottom:15px; margin-left: 10px; font-weight:bold;color:white">{{groups}} </h1>
+            <img src="{% static 'images/bird.png' %}" style = "width: 70px; height: 65px; margin-left: 0 auto, margin-right: 0 auto"></img> 
         </div>
-        <nav class="navbar navbar-default " style =" top:0px;  width:100%; z-index:1000;" data-spy="affix" data-offset-top="57">
+        <nav class="navbar navbar-default " style =" top:0px;   width:100%; z-index:1000;" data-spy="affix" data-offset-top="57">
+            
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" style="float:right;">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>                        
             </button>
+            
             <div class="collapse navbar-collapse" id="myNavbar">
                 <div class="container-fluid">
-                    
+                
                     <ul class="nav navbar-nav">
                         <li> <a href="/"> Home </a></li>
-                        <li><a href="#">#hsru</a></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">All Hashtags
-                            <span class="caret"> </span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">hashtag 1</a></li>
-                                <li><a href="#">hashtag 2 </a></li>
-                                <li><a href="#">hashtag 3</a></li>
-                            </ul>
-                        </li>
                     </ul>
                     
                     <ul class="nav navbar-nav" >
@@ -71,15 +64,19 @@
                         <li><a href="/admin"> Admin <span class="glyphicon glyphicon-cog"></span></a></li>
                     </ul>
                     
-                    <form class="navbar-form navbar-right">
+                    <form action="/Search/" method="get" class="navbar-form navbar-right" >
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search for tweet">
+                            {{form}}
+                            
+                            
+                            <input type="hidden" name="group" value="{{group_name}}" class="form-control"> 
                         </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
+                        <button type="submit" value="ok" class="btn btn-default">Search</button>
                     </form>
                     
                 </div>
-            </div> 
+            </div>
+            
         </nav>
 
         <div class="container-fluid" > <!-- this contains all of the search content stuff-->

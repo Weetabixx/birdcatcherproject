@@ -104,7 +104,7 @@ def index(request, tgroup_name=''): #second param "group"
     
     # Iterate through the tweets
     
-    for n in range(min(len(tot_tweets),200)): # displaying more than 200 tweets does not display properly
+    for n in range(min(len(tot_tweets),30)): # displaying more than 200 tweets does not display properly
         tweet_html.append(tot_tweets[n].tweet_html)
         tweet_text.append(tot_tweets[n].tweet_text)
         
@@ -180,13 +180,20 @@ def search(request, group='', search_string=''):
             template = loader.get_template('index.html')
             
             return HttpResponse(template.render(context))
+        else:
+            #form = searchform()
+            try:
+                return HttpResponseRedirect('/' + form.cleaned_data['group'])
+            except:
+                return HttpResponseRedirect('/')
     else:
-        form = searchform()
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect('/')
     #if request.chrome:
     #    print 'loading chrome version'
     #    template = loader.get_template('indexc.html')
     #else:
     #    print 'lloading none chrome version'
-    template = loader.get_template('index.html')
-    return render(request, 'search.html', {'form': form})
+    #form = searchform()
+    #template = loader.get_template('index.html')
+    return HttpResponseRedirect('/')
+    #return render(request, 'search.html', {'form': form})
