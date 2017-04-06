@@ -73,7 +73,7 @@ def store_tweet(status):
     
     #retrieve its group(s can have multiple)
     accounts = []
-    accounts = account.objects.filter(account_handle=handle)# just fetch the handle, can add a filter instead of for loop
+    accounts = account.objects.filter(account_handle=handle)    # just fetch the handle, can add a filter instead of for loop
     groups = []
     for acc in accounts:
         if acc.filter_by_hashtags == False:
@@ -94,17 +94,7 @@ def store_tweet(status):
             print 'new post'
             save_status(status)
 
-    
-#    new_entry = tweet()
-#    new_entry.tweet_id = status['id']
-#    new_entry.tweet_handle = '@' + str(status['user']['screen_name'])
-#    new_entry.tweet_text = status['text']
-#    twitterdate_string = status['created_at']
-#    #convert twittertime to djangotime
-#    new_entry.tweet_created = parser.parse(twitterdate_string)
-#    #call oembed to create a html of the tweet to store
-#    new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
-#    new_entry.save()
+
 
 # listener Class Override
 class listener(tweepy.StreamListener):
@@ -175,45 +165,5 @@ def search_api():
 search_thread = Thread(target=search_api)
 stream_thread = Thread(target=stream_api)
 
-'''
-need to consider that whenever new account has been added we need to restart the stream
-also need manual restart button in case you want the new account's tweets
-
-maybe add while statement which periodically checks if previous list used to start stream
-is the same as the current list, if not then restart thread
-----
-must keep in mind the api limitations, so cant be restarting the stream every 10 seconds, more like 10 minutes,
-but then also keep in mind if someone just changes the handle of someone rather than add/remove a handle, cant simply keep count
-
-why not do it so that in models if something is saved it sets a global var changed to true then just check that and set it back
-to false if stream has been restarted, so do it when the handle is assigned in the models
-----
-true, maybe check value has been changed, think there is a function
-only on SAVED is not the best either I think, if you change the name but not handle, but something similar sounds good, yeah
-
-The has_changed() method is used to determine if the field value has changed from the initial value. Returns True or False.
-'''
-
 search_thread.start()
-
-'''
-initial_count = changes whenever the stream starts?
-updated_count = checks periodically and if this is diff then restart thread?
-
-initial_count = account.objects.all().count()
-
-def changed():
-    global initial_count
-    updated_count = account.objects.all().count()
-    print initial_count
-    print updated_count
-    if initial_count != updated_count:
-        print "change detected"
-        stream_thread.join() #exit/stop doesn't exist
-        stream_thread.start()
-        initial_count = updated_count
-    threading.Timer(10, changed).start() #checks if account table has been changed every 10 sec and only restarts when it is detected
-'''
-
 stream_thread.start()
-#changed()

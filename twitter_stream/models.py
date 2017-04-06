@@ -12,11 +12,12 @@ class group(models.Model):
     group_level = models.IntegerField(editable=False) 
     group_parent = models.ForeignKey("group", null = True, blank = True) 
     
-    def save(self): # auto add group level to be one higher than parent group
+    # auto add group level to be one higher than parent group
+    def save(self):
         if self.group_parent == None:
             self.group_level = 0
         else:
-            self.group_level = self.group_parent.group_level + 1 #ignore this error, it works
+            self.group_level = self.group_parent.group_level + 1    #ignore this error, it works
         super(group, self).save()
     
     try:
@@ -56,7 +57,7 @@ class account(models.Model):
 
 class hashtag(models.Model):
     
-    hashtag_hash = models.CharField(primary_key=True, max_length=100, null=False)
+    hashtag_hash = models.CharField( max_length=100, null=False)
     hashtag_group = models.ForeignKey("group", null=True,  blank = True)
     
     try:
