@@ -45,7 +45,7 @@ class account(models.Model):
     
     account_id = models.AutoField(primary_key=True)
     account_Name = models.CharField(max_length=100)
-    account_handle = models.CharField(max_length=100) #this assignment needs to trigger stream thread to restart
+    account_handle = models.CharField(max_length=100)
     account_group = models.ForeignKey("group", null=True,  blank = True)
     filter_by_hashtags = models.BooleanField(blank=False, null=False, default=True)
     
@@ -57,7 +57,8 @@ class account(models.Model):
 
 class hashtag(models.Model):
     
-    hashtag_hash = models.CharField( max_length=100, null=False)
+    hashtag_id = models.AutoField(primary_key=True)
+    hashtag_hash = models.CharField(max_length=100, null=False)
     hashtag_group = models.ForeignKey("group", null=True,  blank = True)
     
     try:
