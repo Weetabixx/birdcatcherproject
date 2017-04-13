@@ -17,7 +17,7 @@ class group(models.Model):
         if self.group_parent == None:
             self.group_level = 0
         else:
-            self.group_level = self.group_parent.group_level + 1    #ignore this error, it works
+            self.group_level = self.group_parent.group_level + 1
         super(group, self).save()
     
     try:

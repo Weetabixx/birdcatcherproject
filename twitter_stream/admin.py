@@ -10,7 +10,8 @@ class TweetAdmin(admin.ModelAdmin): # lets you search for tweets on the admin pa
     readonly_fields = ('tweet_handle', 'tweet_text', 'tweet_created',)
     
 class AccountAdmin(admin.ModelAdmin): # lets you search for tweets on the admin page
-    list_display=('account_handle','account_Name','account_group','filter_by_hashtags',)
+    list_display=('account_handle','account_Name','account_group',
+                  'filter_by_hashtags',)
     search_fields=['account_handle','account_Name','account_group__group_name']
     
     

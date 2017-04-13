@@ -4,27 +4,30 @@ try:
          import json
 except ImportError:
         import simplejson as json
+        
+import tweepy
+import oembed
+import time
+import os
+import threading
+import requests.packages.urllib3
+import requests
 
+from datetime import datetime
+from dateutil import parser
+from django.db import transaction
 from .models import tweet
 from .models import account
 from .models import hashtag
-from twitter import Twitter, OAuth, TwitterHTTPError,TwitterStream
-import oembed
-from datetime import datetime
-import time
-from dateutil import parser
-import tweepy
+from threading import Thread
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
-import os
-from threading import Thread
-import threading
-import requests.packages.urllib3
-from django.db import transaction
-import requests
+from twitter import Twitter
+from twitter import OAuth
+from twitter import TwitterHTTPError
+from twitter import TwitterStream
 
-#requests.packages.urllib3.disable_warnings()
 
 # Variables that contains the user credentials to access Twitter API
 ACCESS_TOKEN = '235228993-UMgntnuS8UKyGU7pitxvMNxQO4Eqte2tgAGk9ijK'
@@ -34,14 +37,18 @@ CONSUMER_SECRET = 'IAsBqLL6lOQdcZ4VRu1ZIPvTOMIDw2Pa4bMbPtXbxP8Xwkjjd6'
 
 #Establish connection to twitter for embedded tweet
 consumer = oembed.OEmbedConsumer()
-endpoint = oembed.OEmbedEndpoint('https://publish.twitter.com/oembed?', 'https://twitter.com/*' )
+endpoint = oembed.OEmbedEndpoint('https://publish.twitter.com/oembed?', 
+                                 'https://twitter.com/*' )
 consumer.addEndpoint(endpoint)
+
 
 #function to retrieve embedded tweet
 def embed_tweet(tweet_id,tweet_handle):
-    response = consumer.embed("https://twitter.com/"+tweet_handle+"/status/" + str(tweet_id))
+    response = consumer.embed("https://twitter.com/"+tweet_handle+"/status/" 
+                              + str(tweet_id))
     html_tweet = response["html"]
     return html_tweet
+
 
 #stores a tweet in the database and retrieves an embedded html code
 def save_status(status):
@@ -53,55 +60,49 @@ def save_status(status):
     #convert twittertime to djangotime
     new_entry.tweet_created = parser.parse(twitterdate_string)
     #call oembed to create a html of the tweet to store
-    new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']['screen_name'])
+    new_entry.tweet_html = embed_tweet(new_entry.tweet_id, status['user']
+                                       ['screen_name'])
     new_entry.save()
+    
 
 def store_tweet(status):
-    '''
-    add the hashtags here, crosscheck received tweets with the hashtags stored in the database
-    hashtag table should contain the hashtag itself and the group it is linked to,
-    that way it's easier to check since user and hashtag must have the same group
-    
-    so need to fetch account table to link handle to group and fetch hashtag table to link hashtag to group, check if hashtag group
-    is the same as account group and only then store it?
-    yeah, that's what I thought
-    '''
-    
-    
     #retrieve handle of tweet
     handle = '@' + str(status['user']['screen_name'])
     
     #retrieve its group(s can have multiple)
     accounts = []
-    accounts = account.objects.filter(account_handle=handle)    # just fetch the handle, can add a filter instead of for loop
+    
+    # just fetch the handle, can add a filter instead of for loop
+    accounts = account.objects.filter(account_handle=handle)
     groups = []
     for acc in accounts:
         if acc.filter_by_hashtags == False:
             save_status(status)
             return
-        if acc.account_handle == handle: # selection of handles done in filter
+        
+        # selection of handles done in filter
+        if acc.account_handle == handle: 
             groups.append(acc.account_group)
     
     #retrieve hashtags associated with group
     hashtaglist = []
-    hashtaglist = hashtag.objects.filter(hashtag_group__in = groups) # again can just use filter(hashtag_group__in =)
+    
+    # again can just use filter(hashtag_group__in =)
+    hashtaglist = hashtag.objects.filter(hashtag_group__in = groups)
     for hasht in hashtaglist:
-        #for group in groups: # didnt need this for loop, already got only the correct hashtags with sql query
-            #if hasht.hashtag_group == group:
-                
-                #missing part, check if hashtag is in tweet... changed str(hasht) to str(hasht.hashtag_hash)
-        if hasht.hashtag_hash in status['text'].encode('ascii', 'ignore').decode('ascii'): #remove emojis, because they return an error
+        #remove emojis, because they return an error
+        if hasht.hashtag_hash in status['text'].encode('ascii', 'ignore').decode('ascii'):
             print 'new post'
             save_status(status)
-
 
 
 # listener Class Override
 class listener(tweepy.StreamListener):
     
     def on_data(self, data):    
-    # Twitter returns data in JSON format - we need to decode it first
+        # Twitter returns data in JSON format - we need to decode it first
         decoded = json.loads(data)
+        
         #print decoded
         store_tweet(decoded)
         return True
@@ -110,6 +111,7 @@ class listener(tweepy.StreamListener):
         print status
         if status == 420:
             return False
+
 
 def stream_api():
     
@@ -121,22 +123,15 @@ def stream_api():
     stream = tweepy.Stream(auth = api.auth, listener=l)
     #only 1 stream per authentication, else 420 error
     try:
-    
         handlelistx = []
         handlelistx = account.objects.all()
-        #track_handlelist = [str(x.account_handle) for x in handlelistx ]
         follow_handlelist = [str(api.get_user(screen_name = str(x.account_handle)[1:]).id) for x in handlelistx ]
-        #print follow_handlelist
-        #print "tracking"
-        #stream.filter(track = str(track_handlelist))0
         stream.filter(follow = follow_handlelist)
-        #stream.filter(follow = [str(user.id), str(user2.id), str(user3.id)], async=True)
-        #print "done setting up track"
     except:
         print "well you fucked it"
 
-#get handle objects
 
+#get handle objects
 def search_api():
     #establishing connection to twitter REST API
     oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
@@ -151,15 +146,18 @@ def search_api():
         result_list = []
         for handle in handlelist: # create a search for each handle
             searchq = 'from:' + handle.account_handle
-            #temp_posts = twitter.search.tweets(q='from:@hm_morgan', result_type='recent', lang='en', count=4) # fix incase handlelist is empty
-            temp_posts = twitter.search.tweets(q=searchq, result_type='recent', lang='en', count=1)
+            temp_posts = twitter.search.tweets(q=searchq, result_type='recent', 
+                                               lang='en', count=1)
             result_list.append(temp_posts)
     except:
         pass
     
-    for query_result in result_list: #iterate over each search query
-        for n in range(len(query_result['statuses'])): #iterate over each status(tweet) in query and apply store function
+    #iterate over each search query
+    for query_result in result_list:
+        #iterate over each status(tweet) in query and apply store function
+        for n in range(len(query_result['statuses'])):
             store_tweet(query_result['statuses'][n])
+
 
 #launch separate threads fro search and stream
 search_thread = Thread(target=search_api)

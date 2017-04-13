@@ -11,6 +11,12 @@
         <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
         <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
         <script src="https://unpkg.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
+        <!-- jsDeliver -->
+        <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazy/1.7.4/jquery.lazy.min.js"></script>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazy/1.7.4/jquery.lazy.plugins.min.js"></script>
+        <!-- cdnjs -->
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.4/jquery.lazy.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.4/jquery.lazy.plugins.min.js"></script>
     </head>
 
     <body>
@@ -30,6 +36,10 @@
         
           return t;
         }(document, "script", "twitter-wjs"));</script>
+        <script src="jquery.lazyloadxt.js"></script>
+        <script src="jquery.lazyloadxt.widget.js"></script>
+        
+
         
         <div class="page-header"  style=" height:80px; margin-bottom:0px overflow: hidden; padding-bottom: 25px; max-width:100%;">
             <h1 style="float:left; margin-top:17px; margin-bottom:15px; margin-left: 10px; font-weight:bold;color:white">{{groups}} </h1>
@@ -87,13 +97,15 @@
             {# loads custom filter to easily iterate over each element using list|index:n #}
             {% for i in range %}
                 <div class="grid-item"><!-- this contains one tweet-->
-        
+                
                     {% autoescape off %}
                     {% if i < pin_count %}
                         <!-- do something if its pinned-->
                         <img  src="{% static 'images/pin.png' %}" style =" position: absolute; top: -12; right: -8; width:30px; height:30px;  z-index:999;"></img>
                     {% endif %}
+                    <div data-lazy-widget>
                     {{embedhtml|index:i}}
+                    </div>
                     {% endautoescape %}
                 </div>
             {% endfor %}
