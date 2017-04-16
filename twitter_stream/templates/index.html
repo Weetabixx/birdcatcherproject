@@ -20,6 +20,7 @@
     </head>
 
     <body>
+        
         <script>window.twttr = (function(d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0],
             t = window.twttr || {};
@@ -36,8 +37,7 @@
         
           return t;
         }(document, "script", "twitter-wjs"));</script>
-        <script src="jquery.lazyloadxt.js"></script>
-        <script src="jquery.lazyloadxt.widget.js"></script>
+
         
 
         
@@ -103,9 +103,7 @@
                         <!-- do something if its pinned-->
                         <img  src="{% static 'images/pin.png' %}" style =" position: absolute; top: -12; right: -8; width:30px; height:30px;  z-index:999;"></img>
                     {% endif %}
-                    <div data-lazy-widget>
                     {{embedhtml|index:i}}
-                    </div>
                     {% endautoescape %}
                 </div>
             {% endfor %}
